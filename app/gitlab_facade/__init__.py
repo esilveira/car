@@ -85,7 +85,7 @@ class GitlabToken:
 
 
 class Gitlab:
-    """Facade for Gitlab APISSSSSSS ASDD.
+    """Facade for Gitlab APISAS.
 
     This class is responsible for handling all the interactions with
     Gitlab API.

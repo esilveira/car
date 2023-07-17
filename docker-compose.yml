@@ -1,0 +1,27 @@
+version: '2.2'
+services:
+  app:
+    build: .
+    command: uvicorn app.main:create_app --host 0.0.0.0
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      GITLAB_HOSTNAME: http://gitlab:80/
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    hostname: 'gitlab'
+    environment:
+        GITLAB_OMNIBUS_CONFIG: |
+          gitlab_rails['initial_root_password'] = 'Passw0rd!'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '22:22'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+    

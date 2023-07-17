@@ -1,0 +1,11 @@
+uvicorn~=0.21.1
+fastapi~=0.95.1
+requests~=2.28.1
+aiohttp ~= 3.8
+pydantic[dotenv, email] ~= 1.10
+pyjwt[crypto] ~= 2.7
+dacite ~= 1.6, != 1.8.0, != 1.8.1  # Bug in 1.8
+jsonpatch ~= 1.32
+Pillow==10.0.0
+Sphinx==6.2.1
+sphinx-rtd-theme==1.2.2

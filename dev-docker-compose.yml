@@ -1,0 +1,18 @@
+version: '2.2'
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    hostname: '0.0.0.0:80'
+    environment:
+        GITLAB_OMNIBUS_CONFIG: |
+          gitlab_rails['initial_root_password'] = 'Passw0rd!'
+    ports:
+      - '80:80'
+      - '443:443'
+      - '22:22'
+    volumes:
+      - './gitlab/config:/etc/gitlab'
+      - './gitlab/logs:/var/log/gitlab'
+      - './gitlab/data:/var/opt/gitlab'
+    shm_size: '256m'
+    

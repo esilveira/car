@@ -1,0 +1,1058 @@
+openapi: 3.0.0
+info:
+  title: Learning Tracks API
+  version: 1.0.0
+
+paths:
+  # TODO: Add /auth/forgotpass, /auth/resetpass and /auth/changepass endpoints
+  /auth/register:
+    post:
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                full_name:
+                  type: string
+      responses:
+        '201':
+          description: User created
+        '400':
+          description: Invalid input, user not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /auth/login:
+    post:
+      summary: Login using username and password
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_data:
+                    type: object
+                    properties:
+                      user_id:
+                        type: integer
+                        description: User ID
+                      name:
+                        type: string
+                        description: Full User name
+                      email:
+                        type: string
+                        description: User's email address
+                  access_token:
+                    type: string
+                    description: Access token for the user
+                  refresh_token:
+                    type: string
+                    description: Refresh token for the user
+                  expires_in:
+                    type: integer
+                    description: The time in seconds until the access token expires
+              examples:
+                login_success_example:
+                  value:
+                    user_data:
+                      user_id: 123
+                      name: "John Doe"
+                      email: john@doe.com
+                    access_token: "token"
+                    refresh_token: "token"
+                    expires_in: 7200
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '401':
+          description: Unauthorized
+          
+  /auth/refresh:
+    post:
+      summary: Refresh access token
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refresh_token:
+                  type: string
+                  description: Refresh token for the user
+      responses:
+        '200':
+          description: Access token refreshed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  access_token:
+                    type: string
+                    description: New access token for the user
+                  refresh_token:
+                    type: string
+                    description: New refresh token for the user
+                  expires_in:
+                    type: integer
+                    description: The time in seconds until the new access token expires
+        '400':
+          description: Bad input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users:
+    get:
+      summary: Retrieve a list of users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    username:
+                      type: string
+                    email:
+                      type: string
+                      format: email
+                    full_name:
+                      type: string
+
+  /users/{user_id}:
+    get:
+      summary: Retrieve a specific user by user_id
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                  username:
+                    type: string
+                  email:
+                    type: string
+                    format: email
+                  full_name:
+                    type: string
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /users/{user_id}/progress:
+    get:
+      summary: Get the progress of a user across all learning tracks
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User progress found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  properties: 
+                    learning_track_id:
+                      type: string
+                    progress:
+                      type: array
+                      items:
+                        $ref: '#/components/schemas/ResourceProgress'
+              
+
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /users/{user_id}/progress/{learning_track_id}:
+    get:
+      summary: Get the user progress in a learning track
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: learning_track_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User progress found
+          content:
+            application/json:
+              schema:
+                properties: 
+                  progress:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ResourceProgress'
+
+        '404':
+          description: Learning track or user progress not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    put:
+      summary: Update the user progress in a learning track
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: learning_track_id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties: 
+                  progress:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ResourceProgress'
+      responses:
+        '200':
+          description: User progress updated
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track or user progress not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Reset the user progress in a learning track
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: learning_track_id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User progress reset
+        '404':
+          description: Learning track or user progress not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks:
+    get:
+      summary: Retrieve a list of learning tracks
+      parameters:
+        - in: query
+          name: search
+          description: Search for learning tracks containing the specified keyword in the title, description, or tags.
+          schema:
+            type: string
+        - in: query
+          name: career
+          description: Comma-separated list of careers to search for.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of learning tracks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  hasResults:
+                    type: boolean
+                  tracks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/LearningTrackMetadata'
+    post:
+      summary: Create a new learning track
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LearningTrack'
+      responses:
+        '201':
+          description: Learning track created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  learning_track_id:
+                    type: integer
+        '400':
+          description: Invalid input, learning track not created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}:
+    get:
+      summary: Retrieve a specific learning track by id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Learning track found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningTrack'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    patch:
+      summary: Update a specific learning track by id
+      description: All fields can be ommited. For lesson and resource ids, null id means the creation of the respective objects. If the ID is set, the respective resources must exist and will be modified.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Patch'
+      responses:
+        '200':
+          description: Learning track updated
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Delete a learning track
+      description: Deletes a learning track by its ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Learning track deleted successfully
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /learning-tracks/{id}/suggestions:
+    post:
+      summary: Suggest changes in a learning track
+      description: List of lessons and resources to be updated/created. Each item in the array is a different suggestion.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LessonChangeRequest'
+      responses:
+        '204':
+          description: Suggestion submitted
+
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    get:
+      summary: Get open suggestions in a learning track
+      description: Retuns the list of open suggestions in a learning track.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of learning tracks suggestions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LessonChangeResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+                
+  /learning-tracks/{id}/suggestions/{suggestion_id}:
+    put:
+      summary: Update the status of a specific suggestion
+      parameters:
+        - name: id
+          in: path
+          description: ID of the learning track
+          required: true
+          schema:
+            type: string
+        - name: suggestion_id
+          in: path
+          description: ID of the suggestion
+          required: true
+          schema:
+            type: string
+        - name: action
+          in: query
+          description: Action to perform (reject or approve)
+          required: true
+          schema:
+            type: string
+            enum: [reject, approve]
+      responses:
+        '201':
+          description: Action performed succesfully
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}/report:
+    post:
+      summary: Report an issue with a learning track
+      description: Report an issue or problem with a learning track. The issue description is required. The resource_id is nullable and should be provided if the issue is related to a specific resource within the learning track.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                issue_description:
+                  type: string
+                  description: A description of the issue with the learning track
+                resource_id:
+                  type: string
+                  description: The ID of the resource related to the issue, if applicable
+                  nullable: true
+      responses:
+        '201':
+          description: Issue reported
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}/roles:
+    get:
+      summary: Retrieve the list of creators and moderators associated with a learning track
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Creators and moderators found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Role'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}/roles/{user_id}:
+    put:
+      summary: Add a user to a learning track's moderators or creators
+      parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/Role'
+
+      responses:
+        '201':
+          description: User added
+        '204':
+          description: User updated
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      summary: Remove a user from a learning track's creators and moderators
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: user_id
+          required: true
+          schema:
+            type: integer
+
+      responses:
+        '204':
+          description: User removed successfully
+        '404':
+          description: Learning track or user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}/history:
+      get:
+        summary: Get history of a learning track
+        description: Returns the list of changes in a learning track.
+        parameters:
+          - in: path
+            name: id
+            required: true
+            schema:
+              type: integer
+        responses:
+          '200':
+            description: Returns the list of changes in a learning track.
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/LearningTrackChange'
+          '404':
+            description: Learning track not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
+  
+  /learning-tracks/{id}/history/{change_id}:
+    get:
+      summary: Get a specific version of a learning track
+      description: Returns the raw file of the learning track with the change_id
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: change_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Returns the learning track with the differences before the commit
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LearningTrack'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+    post:
+      summary: Revert a change
+      description: Changes a Learning track to a previous version
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+        - in: path
+          name: change_id
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Revert was successful
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /learning-tracks/{id}/copy:
+    post:
+      summary: Copy a learning track
+      description: Create a copy of an existing learning track
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            
+      responses:
+        '201':
+          description: Learning track copied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  learning_track_id:
+                    type: integer
+        '400':
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Learning track not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+   
+  
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        detail:
+          type: string
+          description: A human-readable description of the error
+    Role:
+      type: object
+      properties:
+        username:
+          type: string
+          description: Username of the user
+        name:
+          type: string
+          description: Name of the user
+        avatar:
+          type: string
+          description: URL of the avatar URL of the user
+        role:
+          type: string
+          enum: [creator, moderator]
+          description: Role of the user
+    ResourceChangeRequest:
+      type: object
+      properties:
+        resource_id:
+          type: string
+          description: Unique identifier for the resource
+        link:
+          type: string
+          format: uri
+          description: URL to the resource
+        title:
+          type: string
+          description: Title of the resource
+        source:
+          type: string
+          description: Source of the resource
+        resource_type:
+          type: string
+          description: Type of the resource (e.g., video, article, etc.)
+        duration:
+          type: integer
+          description: Duration of the resource in minutes
+        addedBy:
+          type: string
+          description: Name of the user who added the resources
+  
+    LessonChangeRequest:
+      type: object
+      description: A suggestion for a resource change in a learning track.
+      properties:
+        lesson_id:
+          type: string
+          description: Unique identifier for the lesson
+        name:
+          type: string
+          description: Name of the lesson
+        description:
+          type: string
+          description: A description of the suggestion
+        resource:
+          $ref: '#/components/schemas/ResourceChangeRequest'
+    LessonChangeResponse:
+      type: object
+      description: A lesson in a learning track. If there are no lessons, it should be sent as an empty array.
+      properties:
+        suggestion_id:
+          type: string
+          description: Unique identifier for the suggestion
+        lesson_id:
+          type: string
+          description: Unique identifier for the lesson
+        name:
+          type: string
+          description: Name of the lesson
+        description:
+          type: string
+          description: A description of the suggestion
+        resource:
+          $ref: '#/components/schemas/ResourceChangeRequest'
+    Lesson:
+      type: object
+      description: A lesson in a learning track. If there are no lessons, it should be sent as an empty array.
+      properties:
+        lesson_id:
+          type: string
+          description: Unique identifier for the lesson
+        name:
+          type: string
+          description: Name of the lesson
+        resources:
+          type: array
+          description: List of resources in the lesson. If there are no resources, it should be sent as an empty array.
+          items:
+            type: object
+            properties:
+              resource_id:
+                type: string
+                description: Unique identifier for the resource
+              link:
+                type: string
+                format: uri
+                description: URL to the resource
+              title:
+                type: string
+                description: Title of the resource
+              source:
+                type: string
+                description: Source of the resource
+              resource_type:
+                type: string
+                description: Type of the resource (e.g., video, article, etc.)
+              duration:
+                type: integer
+                description: Duration of the resource in minutes
+              addedBy:
+                type: string
+                description: Name of the user who added the resources
+    LearningTrack:
+      type: object
+      properties:
+        learning_track_id:
+          type: integer
+          description: Unique identifier for the learning track
+        is_draft:
+          type: boolean
+          description: Indicates whether the learning track is a draft or published
+        is_private:
+          type: boolean
+          description: Indicates whether the learning track is private or publicly accessible
+        title:
+          type: string
+          description: Title of the learning track
+        career:
+          type: string
+          description: Associated career for the learning track
+        career_path:
+          type: string
+          description: Associated career path for the learning track
+        description:
+          type: string
+          description: Description of the learning track
+        thumbnail_image:
+          type: string
+          description: Base-64 encoded thumbnail image of the learning track
+        level:
+          type: string
+          enum: [beginner, intermediate, expert]
+          description: Difficulty level of the learning track (beginner, intermediate, or expert)
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags related to the learning track
+        skills:
+          type: array
+          items:
+            type: string
+          description: List of skills that the learning track aims to teach
+        createdBy:
+          type: object
+          properties:
+            username:
+              type: string
+              description: Username of the learning track creator
+            name:
+              type: string
+              description: Name of the learning track creator
+            avatar:
+              type: string
+              description: URL of the avatar URL of the learning track creator
+            creator_id:
+              type: integer
+              description: ID of the learning track creator
+        lessons:
+          type: array
+          items:
+            $ref: '#/components/schemas/Lesson'
+    LearningTrackChange:
+        type: array
+        items:
+          type: object
+          properties:
+            change_id:
+              type: string
+            change_date:
+              type: string
+              format: date
+            change_message:
+              type: string
+              
+    ResourceProgress:
+        type: object
+        properties:
+          resource_id:
+            type: string
+          completed:
+            type: boolean
+    LearningTrackMetadata:
+      type: object
+      properties:
+        learning_track_id:
+          type: integer
+          description: Unique identifier for the learning track
+        is_draft:
+          type: boolean
+          description: Indicates whether the learning track is a draft or published
+        is_private:
+          type: boolean
+          description: Indicates whether the learning track is private or publicly accessible
+        title:
+          type: string
+          description: Title of the learning track
+        career:
+          type: string
+          description: Associated career for the learning track
+        career_path:
+          type: string
+          description: Associated career path for the learning track
+        description:
+          type: string
+          description: Description of the learning track
+        thumbnail_image:
+          type: string
+          description: Base-64 encoded thumbnail image of the learning track
+        level:
+          type: string
+          enum: [beginner, intermediate, expert]
+          description: Difficulty level of the learning track (beginner, intermediate, or expert)
+        tags:
+          type: array
+          items:
+            type: string
+          description: List of tags related to the learning track
+        createdBy:
+          type: object
+          properties:
+            username:
+              type: string
+              description: Username of the learning track creator
+            name:
+              type: string
+              description: Name of the learning track creator
+            avatar:
+              type: string
+              description: URL of the avatar URL of the learning track creator
+            creator_id:
+              type: integer
+              description: ID of the learning track creator
+    Patch:
+        type: array
+        items:
+          type: object
+          properties:
+            op:
+              type: string
+            path:
+              type: string
+            value:
+              type: string
+
+
+servers:
+  - url: https://api.careercenter.com/
+    description: Production server

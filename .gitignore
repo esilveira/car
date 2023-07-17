@@ -1,0 +1,14 @@
+*.pyc
+.DS_Store
+.env
+.venv
+__pycache__
+venv
+.idea
+gitlab
+.coverage
+htmlcov
+.vscode
+coverage.xml
+docs/_build
+_build/

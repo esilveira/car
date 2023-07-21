@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tests.test_app &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">tests.test_app</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for tests.test_app</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">SimpleNamespace</span>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">async_asgi_testclient</span> <span class="kn">import</span> <span class="n">TestClient</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">IsolatedAsyncioTestCase</span>
+<span class="kn">from</span> <span class="nn">unittest</span> <span class="kn">import</span> <span class="n">mock</span>
+
+<span class="kn">from</span> <span class="nn">app.main</span> <span class="kn">import</span> <span class="n">create_app</span>
+<span class="kn">import</span> <span class="nn">app.main</span> <span class="k">as</span> <span class="nn">app_main</span>
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">gitlab_facade</span> <span class="k">as</span> <span class="n">gl</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">UTC</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">from_dict</span>
+
+<span class="n">DEFAULT_EXPIRATION_DATE</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">UTC</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="create_mock_gitlab"><a class="viewcode-back" href="../../tests.html#tests.test_app.create_mock_gitlab">[docs]</a><span class="k">def</span> <span class="nf">create_mock_gitlab</span><span class="p">():</span>
+    <span class="k">class</span> <span class="nc">MockGitlab</span><span class="p">(</span><span class="n">gl</span><span class="o">.</span><span class="n">Gitlab</span><span class="p">):</span>
+        <span class="n">access_token</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6Ikp&quot;</span>
+            <span class="s2">&quot;XVCJ9.eyJnaXRsYWJfYWNjZXNzX3Rva2VuIjoidG&quot;</span>
+            <span class="s2">&quot;9rZW4iLCJleHAiOjEzNzQzODk1MzQ3Miwic3ViI&quot;</span>
+            <span class="s2">&quot;joyLCJhdWQiOiJjYXJlZXJjZW50ZXIiL&quot;</span>
+            <span class="s2">&quot;CJpc3MiOiJjYXJlZXJjZW50ZXIiLCJpYX&quot;</span>
+            <span class="s2">&quot;QiOjN9.OeehPoaLq3u43ALzA3Ypjs_jIJzx9Ui&quot;</span>
+            <span class="s2">&quot;ygLGazftvKxM&quot;</span><span class="p">)</span>
+
+    <span class="n">gitlab</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">create_autospec</span><span class="p">(</span>
+        <span class="n">MockGitlab</span><span class="p">,</span>
+        <span class="n">spec_set</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+
+    <span class="n">user_info</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">UserInfo</span><span class="p">(</span>
+        <span class="mi">1</span><span class="p">,</span>
+        <span class="s2">&quot;testname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;testusername&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;testemail&quot;</span>
+    <span class="p">)</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_user_info</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">user_info</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">GitlabToken</span><span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabAccessToken</span><span class="p">(</span><span class="s2">&quot;accesstoken&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;mytype&quot;</span><span class="p">,</span>
+            <span class="n">expiration_date</span><span class="o">=</span><span class="n">DEFAULT_EXPIRATION_DATE</span><span class="p">,</span>
+            <span class="n">refresh_token</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">GitlabRefreshToken</span><span class="p">(</span><span class="s2">&quot;refreshtoken&quot;</span><span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">user_info</span><span class="p">)</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">LearningTrackData</span><span class="p">(</span>
+        <span class="n">learning_track_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span>
+        <span class="n">is_draft</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_private</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;str1&#39;</span><span class="p">,</span>
+        <span class="n">career</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span>
+        <span class="n">career_path</span><span class="o">=</span><span class="s1">&#39;someCareerPath&#39;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span>
+        <span class="n">thumbnail_image</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LevelEnum</span><span class="o">.</span><span class="n">beginner</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">],</span>
+        <span class="n">skills</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;skills&#39;</span><span class="p">],</span>
+        <span class="n">createdBy</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">Creator</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s1">&#39;antonio&#39;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;antonio antonio&#39;</span><span class="p">,</span>
+            <span class="n">avatar</span><span class="o">=</span><span class="s2">&quot;https://www.gravatar.com/avatar/&quot;</span>
+            <span class="s2">&quot;b4f1e541550ac1c63c1e7c90932f7f45?s=80&amp;d=identicon&quot;</span><span class="p">,</span>
+            <span class="n">creator_id</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+        <span class="n">lessons</span><span class="o">=</span><span class="p">[</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">Lesson</span><span class="p">(</span><span class="n">lesson_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                      <span class="n">name</span><span class="o">=</span><span class="s1">&#39;someName&#39;</span><span class="p">,</span>
+                      <span class="n">resources</span><span class="o">=</span><span class="p">[</span>
+                          <span class="n">gl</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                                      <span class="n">link</span><span class="o">=</span><span class="s1">&#39;http://.somelink.com&#39;</span><span class="p">,</span>
+                                      <span class="n">title</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                      <span class="n">source</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                      <span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">ResourceTypeEnum</span><span class="o">.</span><span class="n">book</span><span class="p">,</span>
+                                      <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                      <span class="n">addedBy</span><span class="o">=</span><span class="s1">&#39;quimbarreiros&#39;</span><span class="p">),</span>
+                          <span class="n">gl</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                                      <span class="n">link</span><span class="o">=</span><span class="s1">&#39;http://.somelink.com&#39;</span><span class="p">,</span>
+                                      <span class="n">title</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                      <span class="n">source</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                      <span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">ResourceTypeEnum</span><span class="o">.</span><span class="n">book</span><span class="p">,</span>
+                                      <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                      <span class="n">addedBy</span><span class="o">=</span><span class="s1">&#39;quimbarreiros&#39;</span><span class="p">)])])</span>
+
+    <span class="n">learning_tracks_result</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">LearningTrackMetadata</span><span class="p">(</span>
+        <span class="n">learning_track_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span>
+        <span class="n">is_draft</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">is_private</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="s1">&#39;str1&#39;</span><span class="p">,</span>
+        <span class="n">career</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span>
+        <span class="n">description</span><span class="o">=</span><span class="s1">&#39;string&#39;</span><span class="p">,</span>
+        <span class="n">thumbnail_image</span><span class="o">=</span><span class="s1">&#39;None&#39;</span><span class="p">,</span>
+        <span class="n">tags</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">],</span>
+        <span class="n">createdBy</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">Creator</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s1">&#39;antonio&#39;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;antonio antonio&#39;</span><span class="p">,</span>
+            <span class="n">avatar</span><span class="o">=</span><span class="s2">&quot;https://www.gravatar.com/avatar/&quot;</span>
+            <span class="s2">&quot;b4f1e541550ac1c63c1e7c90932f7f45?s=80&amp;d=identicon&quot;</span><span class="p">,</span>
+            <span class="n">creator_id</span><span class="o">=</span><span class="mi">15</span><span class="p">),</span>
+        <span class="n">career_path</span><span class="o">=</span><span class="s2">&quot;someCareerPath&quot;</span><span class="p">,</span>
+        <span class="n">level</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LevelEnum</span><span class="o">.</span><span class="n">beginner</span><span class="p">)</span>
+    <span class="n">learning_tracks_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">learning_tracks_result</span><span class="p">]</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_learning_tracks</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">AllLearningTracks</span><span class="p">(</span>
+            <span class="n">hasResults</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">learning_tracks</span><span class="o">=</span><span class="n">learning_tracks_list</span>
+        <span class="p">))</span>
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">post_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">12345</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">UserProgress</span><span class="p">(</span>
+            <span class="n">learning_track_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span>
+            <span class="n">progress</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+                    <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                    <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+                    <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID1&#39;</span><span class="p">,</span>
+                    <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">]),</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">UserProgress</span><span class="p">(</span>
+            <span class="n">learning_track_id</span><span class="o">=</span><span class="mi">123456</span><span class="p">,</span>
+            <span class="n">progress</span><span class="o">=</span><span class="p">[</span>
+                <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+                    <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                    <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+                <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+                    <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID1&#39;</span><span class="p">,</span>
+                    <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="p">])]</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_learning_track_progress</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+            <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+            <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">(</span>
+            <span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID1&#39;</span><span class="p">,</span>
+            <span class="n">completed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="p">]</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">put_learning_track_progress</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_learning_track_commits</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">LearningTrackCommit</span><span class="p">(</span>
+            <span class="n">change_id</span><span class="o">=</span><span class="s1">&#39;9e023e77f0f7b53c17419358aadfcb787921404d&#39;</span><span class="p">,</span>
+            <span class="c1"># short_id=&#39;9e023e77&#39;,</span>
+            <span class="c1"># created_at=&#39;2023-07-09T14:25:58.000+00:00&#39;,</span>
+            <span class="c1"># parent_ids=[],</span>
+            <span class="c1"># title=&#39;Create learning track&#39;,</span>
+            <span class="n">change_message</span><span class="o">=</span><span class="s1">&#39;{&quot;description&quot;: &quot;string1&quot;, &quot;career&quot;: &quot;string2&quot;}&#39;</span><span class="p">,</span>
+            <span class="c1"># author_name=&#39;antonio antonio&#39;,</span>
+            <span class="c1"># author_email=&#39;admin@example.com&#39;,</span>
+            <span class="c1"># authored_date=&#39;2023-07-09T14:25:58.000+00:00&#39;,</span>
+            <span class="c1"># committer_name=&#39;Administrator&#39;,</span>
+            <span class="c1"># committer_email=&#39;admin@example.com&#39;,</span>
+            <span class="n">change_date</span><span class="o">=</span><span class="s1">&#39;2023-07-09T14:25:58.000+00:00&#39;</span><span class="p">,</span>
+            <span class="c1"># trailers={},</span>
+            <span class="c1"># web_url=&quot;http://gitlab.example.com/root/1234567891-2a31b4/&quot;</span>
+            <span class="c1"># &quot;-/commit/9e023e77f0f7b53c17419358aadfcb787921404d&quot;</span>
+        <span class="p">),</span>
+    <span class="p">]</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">copy_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">123</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">revert_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">get_open_suggestions</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">LearningTrackSuggestion</span><span class="p">(</span>
+            <span class="n">suggestion_id</span><span class="o">=</span><span class="mi">12345</span><span class="p">,</span>
+            <span class="n">lesson_id</span><span class="o">=</span><span class="mi">123</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">&quot;lesson name&quot;</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">&quot;suggestion description&quot;</span><span class="p">,</span>
+            <span class="n">resource</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">Resource</span><span class="p">(</span><span class="n">resource_id</span><span class="o">=</span><span class="s1">&#39;someUUID&#39;</span><span class="p">,</span>
+                                 <span class="n">link</span><span class="o">=</span><span class="s1">&#39;http://.somelink.com&#39;</span><span class="p">,</span>
+                                 <span class="n">title</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                 <span class="n">source</span><span class="o">=</span><span class="s1">&#39;someTitle&#39;</span><span class="p">,</span>
+                                 <span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">ResourceTypeEnum</span><span class="o">.</span><span class="n">book</span><span class="p">,</span>
+                                 <span class="n">duration</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+                                 <span class="n">addedBy</span><span class="o">=</span><span class="s1">&#39;quimbarreiros&#39;</span><span class="p">))]</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">post_suggestions</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">manage_suggestion</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">edit_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="mi">200</span>
+
+    <span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">delete_learning_track</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">gitlab</span></div>
+
+
+<div class="viewcode-block" id="AppTestMixin"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppTestMixin">[docs]</a><span class="k">class</span> <span class="nc">AppTestMixin</span><span class="p">(</span><span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="AppTestMixin.setUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppTestMixin.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app</span> <span class="o">=</span> <span class="n">create_app</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_patch</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="s2">&quot;app.gitlab_facade.Gitlab&quot;</span><span class="p">,</span>
+            <span class="n">new</span><span class="o">=</span><span class="n">create_mock_gitlab</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_patch</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">app_settings</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span>
+            <span class="n">jwt_secret</span><span class="o">=</span><span class="s2">&quot;test_jwt_secret&quot;</span><span class="p">,</span>
+            <span class="n">gitlab_admin_token</span><span class="o">=</span><span class="s2">&quot;test_admin_token&quot;</span><span class="p">,</span>
+            <span class="n">loglevel</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+            <span class="n">register_enabled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_settings</span> <span class="o">=</span> <span class="n">SimpleNamespace</span><span class="p">(</span>
+            <span class="n">gitlab_hostname</span><span class="o">=</span><span class="s2">&quot;test_hostname&quot;</span><span class="p">)</span>
+
+        <span class="n">patcher</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="o">.</span><span class="n">multiple</span><span class="p">(</span>
+            <span class="s2">&quot;app.main&quot;</span><span class="p">,</span> <span class="n">AppSettings</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">app_settings</span><span class="p">,</span>
+            <span class="n">_GitlabSettings</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_settings</span><span class="p">)</span>
+        <span class="n">patcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addCleanup</span><span class="p">(</span><span class="n">patcher</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
+
+        <span class="n">app_main</span><span class="o">.</span><span class="n">get_app_settings</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="n">app_main</span><span class="o">.</span><span class="n">get_gitlab_config</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gitlab</span><span class="o">.</span><span class="n">return_value</span></div>
+
+<div class="viewcode-block" id="AppTestMixin.tearDown"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppTestMixin.tearDown">[docs]</a>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">tearDown</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_patch</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="TestClientMixin"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientMixin">[docs]</a><span class="k">class</span> <span class="nc">TestClientMixin</span><span class="p">(</span><span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestClientMixin.setUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientMixin.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="TestClientMixin.asyncSetUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientMixin.asyncSetUp">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">asyncSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">asyncSetUp</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="fm">__aenter__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TestClientMixin.asyncTearDown"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientMixin.asyncTearDown">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">asyncTearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="fm">__aexit__</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">asyncTearDown</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="TestClientAuthenticatedMixin"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientAuthenticatedMixin">[docs]</a><span class="k">class</span> <span class="nc">TestClientAuthenticatedMixin</span><span class="p">(</span><span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="TestClientAuthenticatedMixin.setUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientAuthenticatedMixin.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">TestClient</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">app</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;Authorization&quot;</span><span class="p">:</span> <span class="s2">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJnaXRsYWJ&quot;</span>
+            <span class="s2">&quot;fYWNjZXNzX3Rva2VuIjoidG9rZW4iLCJleHAiOjEzNzQzODk1MzQ3Miwic3ViIjoy&quot;</span>
+            <span class="s2">&quot;LCJhdWQiOiJjYXJlZXJjZW50ZXIiLCJpc3MiOiJjYXJlZXJjZW50ZXIiLCJpYXQiO&quot;</span>
+            <span class="s2">&quot;jN9.DAidB8i_FpPnVNnMxoZWvVOLNE2hLRHG6qUjExAb21Y&quot;</span>
+        <span class="p">}</span></div>
+
+<div class="viewcode-block" id="TestClientAuthenticatedMixin.asyncSetUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientAuthenticatedMixin.asyncSetUp">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">asyncSetUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">asyncSetUp</span><span class="p">()</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="fm">__aenter__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+<div class="viewcode-block" id="TestClientAuthenticatedMixin.asyncTearDown"><a class="viewcode-back" href="../../tests.html#tests.test_app.TestClientAuthenticatedMixin.asyncTearDown">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">asyncTearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="fm">__aexit__</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">return</span> <span class="k">await</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">asyncTearDown</span><span class="p">()</span></div></div>
+
+
+<div class="viewcode-block" id="AppLoginTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase">[docs]</a><span class="k">class</span> <span class="nc">AppLoginTestCase</span><span class="p">(</span><span class="n">TestClientMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="AppLoginTestCase.setUp"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">setUp</span><span class="p">()</span>
+        <span class="n">encode_token_patcher</span> <span class="o">=</span> <span class="n">mock</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="s2">&quot;app.main.encode_token&quot;</span><span class="p">,</span> <span class="n">autospec</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">spec_set</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encode_token</span> <span class="o">=</span> <span class="n">encode_token_patcher</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">encode_token</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;test_token&quot;</span><span class="p">,</span> <span class="s2">&quot;test_refresh_token&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">addCleanup</span><span class="p">(</span><span class="n">encode_token_patcher</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppLoginTestCase.test_login"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.test_login">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_login</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s2">&quot;test&quot;</span><span class="p">)</span>
+
+        <span class="n">response_value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">],</span> <span class="s2">&quot;test_token&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">],</span> <span class="s2">&quot;test_refresh_token&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="s2">&quot;user_info&quot;</span><span class="p">],</span> <span class="p">{</span>
+            <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;testname&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;testusername&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;testemail&quot;</span>
+        <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertAlmostEqual</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">DEFAULT_EXPIRATION_DATE</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">UTC</span><span class="p">)</span> <span class="o">-</span>
+             <span class="n">timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">5</span><span class="p">))</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">(),</span>
+            <span class="n">response_value</span><span class="p">[</span><span class="s2">&quot;expires_in&quot;</span><span class="p">],</span> <span class="n">delta</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppLoginTestCase.test_login_with_invalid_credentials"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.test_login_with_invalid_credentials">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_login_with_invalid_credentials</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">InvalidCredentialsError</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppLoginTestCase.test_login_gitlab_unavailable"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.test_login_gitlab_unavailable">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_login_gitlab_unavailable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gitlab timeout or unavailable&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Timeout while logging in user test1&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppLoginTestCase.test_login_gitlab_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.test_login_gitlab_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_login_gitlab_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Any unknown error thrown by gitlab&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GitlabError</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Error while logging in user test1&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppLoginTestCase.test_login_gitlab_invalid_input"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppLoginTestCase.test_login_gitlab_invalid_input">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_login_gitlab_invalid_input</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;quim barreiros&quot;</span><span class="p">:</span> <span class="s2">&quot;test1&quot;</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">422</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/login&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="s2">&quot;lsdfighaujiodfns&quot;</span><span class="p">,</span>
+            <span class="n">headers</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;blah&quot;</span><span class="p">})</span>
+
+        <span class="c1"># Fast API bug, 422 instead of 400 is sent</span>
+        <span class="c1"># https://github.com/tiangolo/fastapi/issues/643</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">422</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AppRegisterTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase">[docs]</a><span class="k">class</span> <span class="nc">AppRegisterTestCase</span><span class="p">(</span><span class="n">TestClientMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span>
+                          <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="AppRegisterTestCase.test_register"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">assert_called_once_with</span><span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">RegisterData</span><span class="p">(</span>
+                <span class="n">username</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="s1">&#39;password&#39;</span><span class="p">,</span>
+                <span class="n">email</span><span class="o">=</span><span class="s1">&#39;test@example.com&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Test User&#39;</span><span class="p">))</span></div>
+
+<div class="viewcode-block" id="AppRegisterTestCase.test_register_entity_already_exists"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register_entity_already_exists">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register_entity_already_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">EntityAlreadyExists</span><span class="p">(</span>
+            <span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;test&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Entitiy already exists username: test&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">409</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">EntityAlreadyExists</span><span class="p">(</span>
+            <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="s2">&quot;test@example.com&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;DEBUG&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Entitiy already exists email: test@example.com&quot;</span><span class="p">,</span>
+                      <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">409</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRegisterTestCase.test_register_invalid_data"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register_invalid_data">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register_invalid_data</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="ne">ValueError</span><span class="p">()</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRegisterTestCase.test_register_gitlab_unavailable"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register_gitlab_unavailable">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register_gitlab_unavailable</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Gitlab timeout or unavailable&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;WARNING&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Timeout while registering user test.&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+    <span class="c1"># TODO: Need to check if FastAPI logs unhandled exceptions or is the</span>
+    <span class="c1"># responsibility of uvicorn / gunicorn.</span>
+
+<div class="viewcode-block" id="AppRegisterTestCase.test_register_gitlab_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register_gitlab_error">[docs]</a>    <span class="nd">@unittest</span><span class="o">.</span><span class="n">skip</span><span class="p">(</span><span class="s2">&quot;GitlabError is not logged, &quot;</span>
+                   <span class="s2">&quot;perhaps because of the asgi test client.&quot;</span><span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register_gitlab_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>  <span class="c1"># pragma: no cover</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Any unknown error thrown by gitlab&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">register</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">gl</span><span class="o">.</span><span class="n">GitlabError</span><span class="p">()</span>
+
+        <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">assertLogs</span><span class="p">(</span><span class="s2">&quot;backend.main&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;ERROR&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">cm</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+                <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">,</span> <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="s2">&quot;password&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;test@example.com&quot;</span><span class="p">,</span> <span class="s2">&quot;full_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Test User&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">&quot;Error while registering in user test1&quot;</span><span class="p">,</span> <span class="n">cm</span><span class="o">.</span><span class="n">output</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppRegisterTestCase.test_register_invalid_json"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppRegisterTestCase.test_register_invalid_json">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_register_invalid_json</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Invalid json sent to the endpoint&quot;&quot;&quot;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/auth/register&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;test&quot;</span><span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">422</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AppGetLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppGetLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">AppGetLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span>
+                                  <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AppGetLearningTrackTestCase.test_get_learning_track_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppGetLearningTrackTestCase.test_get_learning_track_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/12345&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">from_dict</span><span class="p">(</span><span class="n">datacls</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LearningTrackData</span><span class="p">,</span>
+                                   <span class="n">data</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()),</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppGetLearningTrackTestCase.test_get_learning_track_not_found"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppGetLearningTrackTestCase.test_get_learning_track_not_found">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_not_found</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> \
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabLookupError</span><span class="p">(</span><span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">learning_track</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123456&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppGetLearningTrackTestCase.test_get_all_learning_track_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppGetLearningTrackTestCase.test_get_all_learning_track_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_all_learning_track_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks?search=someSearch&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">from_dict</span><span class="p">(</span><span class="n">datacls</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">AllLearningTracks</span><span class="p">,</span>
+                                   <span class="n">data</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()),</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_tracks</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="AppPostLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppPostLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">AppPostLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span>
+                                   <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="AppPostLearningTrackTestCase.test_post_learning_track_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppPostLearningTrackTestCase.test_post_learning_track_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="c1"># Get the directory path of the current file</span>
+        <span class="n">current_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="vm">__file__</span><span class="p">))</span>
+        <span class="c1"># Construct the path to the image file</span>
+        <span class="n">image_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_dir</span><span class="p">,</span> <span class="s2">&quot;images/image.jpg&quot;</span><span class="p">)</span>
+
+        <span class="n">image</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">image_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
+        <span class="n">thumbnail_image</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">image</span><span class="o">.</span><span class="n">read</span><span class="p">())</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">image</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="n">learning_track_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;learning_track_id&quot;</span><span class="p">:</span> <span class="mi">12345</span><span class="p">,</span>
+            <span class="s2">&quot;is_draft&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+            <span class="s2">&quot;is_private&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;str1&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;career&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;career_path&quot;</span><span class="p">:</span> <span class="s2">&quot;someCareerPath&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;thumbnail_image&quot;</span><span class="p">:</span> <span class="n">thumbnail_image</span><span class="p">,</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;beginner&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;tags&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;string&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;skills&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;skills&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;createdBy&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="s2">&quot;antonio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;antonio antonio&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;avatar&quot;</span><span class="p">:</span> <span class="s2">&quot;https://www.gravatar.com/avatar/&quot;</span>
+                <span class="s2">&quot;b4f1e541550ac1c63c1e7c90932f7f45?s=80&amp;d=identicon&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;creator_id&quot;</span><span class="p">:</span> <span class="mi">15</span>
+            <span class="p">},</span>
+            <span class="s2">&quot;lessons&quot;</span><span class="p">:</span> <span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;lesson_id&quot;</span><span class="p">:</span> <span class="s2">&quot;someUUID&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;someName&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;resources&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span>
+                            <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;someUUID&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;http://.somelink.com&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;someTitle&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;someTitle&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+                            <span class="s2">&quot;addedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;quimbarreiros&quot;</span>
+                        <span class="p">}</span>
+                    <span class="p">]</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">}</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="n">learning_track_data</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">12345</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">post_learning_track</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="AppPostLearningTrackTestCase.test_post_learning_track_invalid_learning_track"><a class="viewcode-back" href="../../tests.html#tests.test_app.AppPostLearningTrackTestCase.test_post_learning_track_invalid_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_invalid_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">post_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid learning track.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">422</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="UserProgressTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase">[docs]</a><span class="k">class</span> <span class="nc">UserProgressTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span>
+                           <span class="n">AppTestMixin</span><span class="p">,</span>
+                           <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_tracks_progress_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_tracks_progress_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_tracks_progress_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">from_dict</span><span class="p">(</span><span class="n">datacls</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">UserProgress</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="o">.</span><span class="n">return_value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_tracks_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_tracks_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_tracks_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error getting the user&#39;s current progress.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_tracks_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_tracks_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_tracks_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_progress_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_progress_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_progress_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">from_dict</span><span class="p">(</span><span class="n">datacls</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">ResourceProgress</span><span class="p">,</span>
+                      <span class="n">data</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()[</span><span class="s2">&quot;progress&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track_progress</span><span class="o">.</span><span class="n">return_value</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_progress_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_progress_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_progress_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Error getting the user&#39;s current progress.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_put_learning_track_progress_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_put_learning_track_progress_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_put_learning_track_progress_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;someUUID&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_put_learning_track_progress_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_put_learning_track_progress_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_put_learning_track_progress_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">put_learning_track_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;someUUID&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_put_learning_track_progress_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_put_learning_track_progress_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_put_learning_track_progress_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">put_learning_track_progress</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/users/12345/progress/12345&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;progress&quot;</span><span class="p">:</span> <span class="p">[</span>
+                    <span class="p">{</span>
+                        <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;someUUID&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;completed&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">]</span>
+            <span class="p">})</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_healthcheck"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_healthcheck">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_healthcheck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/-/health&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_history_sucess"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_history_sucess">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_history_sucess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/12345/history&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_history_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_history_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_history_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track_commits</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabLookupError</span><span class="p">(</span><span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">learning_track</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/999/history&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_commit_id_sucess"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_commit_id_sucess">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_commit_id_sucess</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/12345/history/&quot;</span>
+            <span class="s2">&quot;9e023e77f0f7b53c17419358aadfcb787921404d&quot;</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_commit_id_learning_track_found"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_commit_id_learning_track_found">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_commit_id_learning_track_found</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabLookupError</span><span class="p">(</span><span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">learning_track</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/999/history/abc&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="UserProgressTestCase.test_get_learning_track_commit_id_commit_not_found"><a class="viewcode-back" href="../../tests.html#tests.test_app.UserProgressTestCase.test_get_learning_track_commit_id_commit_not_found">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_commit_id_commit_not_found</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabLookupError</span><span class="p">(</span><span class="n">resource_type</span><span class="o">=</span><span class="n">gl</span><span class="o">.</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">commit</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/12345/history/abc&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="CopyLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.CopyLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">CopyLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span>
+                                <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="CopyLearningTrackTestCase.test_copy_learning_track"><a class="viewcode-back" href="../../tests.html#tests.test_app.CopyLearningTrackTestCase.test_copy_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_copy_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/12345/copy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CopyLearningTrackTestCase.test_copy_learning_track_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.CopyLearningTrackTestCase.test_copy_learning_track_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_copy_learning_track_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">copy_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/12345/copy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CopyLearningTrackTestCase.test_copy_learning_track_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.CopyLearningTrackTestCase.test_copy_learning_track_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_copy_learning_track_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">copy_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/12345/copy&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="RevertLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.RevertLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">RevertLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span>
+                                  <span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="RevertLearningTrackTestCase.test_revert_learning_track"><a class="viewcode-back" href="../../tests.html#tests.test_app.RevertLearningTrackTestCase.test_revert_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_revert_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/12345/history/&quot;</span>
+            <span class="s2">&quot;df9f6c4b5c5eb1f462daca015410f9cb34a2e6f0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RevertLearningTrackTestCase.test_revert_learning_track_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.RevertLearningTrackTestCase.test_revert_learning_track_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_revert_learning_track_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">revert_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/12345/history/&quot;</span>
+            <span class="s2">&quot;df9f6c4b5c5eb1f462daca015410f9cb34a2e6f0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="RevertLearningTrackTestCase.test_revert_learning_track_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.RevertLearningTrackTestCase.test_revert_learning_track_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_revert_learning_track_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">revert_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/12/history/&quot;</span>
+            <span class="s2">&quot;df9f6c4b5c5eb1f462daca015410f9cb34a2e6f0&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase">[docs]</a><span class="k">class</span> <span class="nc">LearningTrackSuggestionTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span>
+                                      <span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_get_learning_track_suggestions"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_get_learning_track_suggestions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/123/&quot;</span>
+                                         <span class="s2">&quot;suggestions&quot;</span><span class="p">)</span>
+
+        <span class="n">response_value</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;lesson_id&quot;</span><span class="p">],</span> <span class="s2">&quot;123&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span> <span class="s2">&quot;lesson name&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;suggestion description&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;suggestion_id&quot;</span><span class="p">],</span> <span class="s2">&quot;12345&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;resource_id&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;someUUID&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;link&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;http://.somelink.com&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;title&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;someTitle&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;resource_type&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;book&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;duration&quot;</span><span class="p">],</span> <span class="mi">10</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response_value</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;resource&quot;</span><span class="p">][</span><span class="s2">&quot;addedBy&quot;</span><span class="p">],</span>
+                         <span class="s2">&quot;quimbarreiros&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_suggestions_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_open_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/123/&quot;</span>
+                                         <span class="s2">&quot;suggestions&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_suggestions_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_open_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/123/&quot;</span>
+                                         <span class="s2">&quot;suggestions&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_gitlab_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_get_learning_track_suggestions_gitlab_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_get_learning_track_suggestions_gitlab_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">get_open_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Gitlab error.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/123/&quot;</span>
+                                         <span class="s2">&quot;suggestions&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_post_learning_track_suggestions"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_post_learning_track_suggestions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;lesson_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string3213231&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;dadxadxas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;addedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_suggestions_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">post_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;lesson_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string3213231&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;dadxadxas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;addedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_not_found_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_not_found_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_suggestions_not_found_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">post_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;lesson_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string3213231&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;dadxadxas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;addedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_internal_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_post_learning_track_suggestions_internal_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_post_learning_track_suggestions_internal_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">post_suggestions</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Gitlab error.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions&quot;</span><span class="p">,</span> <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;lesson_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string3213231&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;dadxadxas&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;resource&quot;</span><span class="p">:</span> <span class="p">{</span>
+                            <span class="s2">&quot;resource_id&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;link&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;source&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;resource_type&quot;</span><span class="p">:</span> <span class="s2">&quot;book&quot;</span><span class="p">,</span>
+                            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+                            <span class="s2">&quot;addedBy&quot;</span><span class="p">:</span> <span class="s2">&quot;string&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_approve"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_approve">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_approve</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=approve&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_reject"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_reject">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_reject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=reject&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_invalid_action"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_invalid_action">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_invalid_action</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=invalid&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">400</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">manage_suggestion</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=approve&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_not_found_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_not_found_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_not_found_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">manage_suggestion</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=approve&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="LearningTrackSuggestionTestCase.test_manage_suggestion_internal_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.LearningTrackSuggestionTestCase.test_manage_suggestion_internal_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_manage_suggestion_internal_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">manage_suggestion</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gl</span><span class="o">.</span><span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Gitlab error.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">put</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/123/suggestions/12345?action=approve&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">502</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="EditLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.EditLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">EditLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span> <span class="n">AppTestMixin</span><span class="p">,</span>
+                                <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+<div class="viewcode-block" id="EditLearningTrackTestCase.test_edit_learning_track_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.EditLearningTrackTestCase.test_edit_learning_track_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_edit_learning_track_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                <span class="p">{</span>
+                    <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/title&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;newTitle3&quot;</span>
+                <span class="p">}</span>
+            <span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span>
+                         <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">edit_learning_track</span><span class="o">.</span><span class="n">return_value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditLearningTrackTestCase.test_edit_learning_track_empty_patch"><a class="viewcode-back" href="../../tests.html#tests.test_app.EditLearningTrackTestCase.test_edit_learning_track_empty_patch">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_edit_learning_track_empty_patch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">[])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditLearningTrackTestCase.test_edit_learning_track_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.EditLearningTrackTestCase.test_edit_learning_track_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_edit_learning_track_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">edit_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">,</span>
+                                           <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                                               <span class="p">{</span>
+                                                   <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                                                   <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/title&quot;</span><span class="p">,</span>
+                                                   <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;newTitle3&quot;</span>
+                                               <span class="p">}</span>
+                                           <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="EditLearningTrackTestCase.test_edit_learning_track_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.EditLearningTrackTestCase.test_edit_learning_track_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_edit_learning_track_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">edit_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">,</span>
+                                           <span class="n">json</span><span class="o">=</span><span class="p">[</span>
+                                               <span class="p">{</span>
+                                                   <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;replace&quot;</span><span class="p">,</span>
+                                                   <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="s2">&quot;/title&quot;</span><span class="p">,</span>
+                                                   <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="s2">&quot;newTitle3&quot;</span>
+                                               <span class="p">}</span>
+                                           <span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div></div>
+
+
+<div class="viewcode-block" id="DeleteLearningTrackTestCase"><a class="viewcode-back" href="../../tests.html#tests.test_app.DeleteLearningTrackTestCase">[docs]</a><span class="k">class</span> <span class="nc">DeleteLearningTrackTestCase</span><span class="p">(</span><span class="n">TestClientAuthenticatedMixin</span><span class="p">,</span>
+                                  <span class="n">AppTestMixin</span><span class="p">,</span> <span class="n">IsolatedAsyncioTestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="DeleteLearningTrackTestCase.test_delete_learning_track_success"><a class="viewcode-back" href="../../tests.html#tests.test_app.DeleteLearningTrackTestCase.test_delete_learning_track_success">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_delete_learning_track_success</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DeleteLearningTrackTestCase.test_delete_learning_track_timeout"><a class="viewcode-back" href="../../tests.html#tests.test_app.DeleteLearningTrackTestCase.test_delete_learning_track_timeout">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_delete_learning_track_timeout</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">delete_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">asyncio</span><span class="o">.</span><span class="n">TimeoutError</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">504</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="DeleteLearningTrackTestCase.test_delete_learning_track_error"><a class="viewcode-back" href="../../tests.html#tests.test_app.DeleteLearningTrackTestCase.test_delete_learning_track_error">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">test_delete_learning_track_error</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gitlab_instance</span><span class="o">.</span><span class="n">delete_learning_track</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;/learning-tracks/1&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span></div></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

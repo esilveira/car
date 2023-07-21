@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.gitlab_facade.models &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+          <li class="breadcrumb-item"><a href="../gitlab_facade.html">app.gitlab_facade</a></li>
+      <li class="breadcrumb-item active">app.gitlab_facade.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for app.gitlab_facade.models</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="UserInfo"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.UserInfo">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UserInfo</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User information</span>
+
+<span class="sd">    Loosely based on</span>
+<span class="sd">    https://docs.gitlab.com/ee/integration/openid_connect_provider.html</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>  <span class="c1"># ID of the user</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>  <span class="c1"># Full name of the user</span>
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="RegisterData"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.RegisterData">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">RegisterData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data to register a user.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        username: Username of the user.</span>
+<span class="sd">        password: Password of the user.</span>
+<span class="sd">        email: Email of the user.</span>
+<span class="sd">        full_name: Full name of the user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">email</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="Creator"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.Creator">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Creator</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Creator.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        username: Username of the creator.</span>
+<span class="sd">        name: Name of the cretor.</span>
+<span class="sd">        avatar: Avatar of the creator.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">avatar</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">creator_id</span><span class="p">:</span> <span class="nb">int</span></div>
+
+
+<div class="viewcode-block" id="ResourceTypeEnum"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum">[docs]</a><span class="k">class</span> <span class="nc">ResourceTypeEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">article</span> <span class="o">=</span> <span class="s2">&quot;article&quot;</span>
+    <span class="n">book</span> <span class="o">=</span> <span class="s2">&quot;book&quot;</span>
+    <span class="n">course</span> <span class="o">=</span> <span class="s2">&quot;course&quot;</span>
+    <span class="n">video</span> <span class="o">=</span> <span class="s2">&quot;video&quot;</span></div>
+
+
+<div class="viewcode-block" id="Resource"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.Resource">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Resource</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Resource.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id: Unique identifier for the resource</span>
+<span class="sd">        link: URL to the resource</span>
+<span class="sd">        title: Title of the resource</span>
+<span class="sd">        source: Source of the resource</span>
+<span class="sd">        type: Type of the resource (e.g., video, article, etc.)</span>
+<span class="sd">        duration: Duration of the resource in minutes</span>
+<span class="sd">        addedBy: Name of the user who added the resources</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">link</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">source</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">resource_type</span><span class="p">:</span> <span class="n">ResourceTypeEnum</span>
+    <span class="n">duration</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">addedBy</span><span class="p">:</span> <span class="nb">str</span>
+
+    <span class="k">def</span> <span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">duration</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">duration</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Lesson"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.Lesson">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">Lesson</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Lesson.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id: Unique identifier for the resource.</span>
+<span class="sd">        name: Name of the lesson.</span>
+<span class="sd">        resources: List of resources.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lesson_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">resources</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Resource</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LevelEnum"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.LevelEnum">[docs]</a><span class="k">class</span> <span class="nc">LevelEnum</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+    <span class="n">beginner</span> <span class="o">=</span> <span class="s2">&quot;beginner&quot;</span>
+    <span class="n">intermediate</span> <span class="o">=</span> <span class="s2">&quot;intermediate&quot;</span>
+    <span class="n">expert</span> <span class="o">=</span> <span class="s2">&quot;expert&quot;</span></div>
+
+
+<div class="viewcode-block" id="LearningTrackData"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LearningTrackData</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Learning Track.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        is_draft: Indicates whether the learning track is a draft or published</span>
+<span class="sd">        is_private: Indicates whether the learning track</span>
+<span class="sd">        is private or publicly accessible</span>
+<span class="sd">        title: Title of the learning track</span>
+<span class="sd">        career: Associated career for the learning track</span>
+<span class="sd">        career_path: Associated career path for the learning track</span>
+<span class="sd">        description: Description of the learning track</span>
+<span class="sd">        thumbnail_image: URL to the thumbnail image of the learning track</span>
+<span class="sd">        level: Difficulty level of the learning track</span>
+<span class="sd">            (beginner, intermediate, or expert)</span>
+<span class="sd">        tags: List of tags related to the learning track</span>
+<span class="sd">        skills: List of skills that the learning track aims to teach</span>
+<span class="sd">        learning_track_id: Unique identifier for the learning track</span>
+<span class="sd">        createdBy: Creator of the Learning Track</span>
+<span class="sd">        lessons: List of Lesson in this Learning Track</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">is_draft</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_private</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">career</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">career_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">thumbnail_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">LevelEnum</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">skills</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">lessons</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Lesson</span><span class="p">]</span>
+    <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">createdBy</span><span class="p">:</span> <span class="n">Creator</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="LearningTrackSuggestion"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LearningTrackSuggestion</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Data of a Learning Track Suggestion.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        lesson_id: Unique identifier for the lesson</span>
+<span class="sd">        name: Name of the lesson</span>
+<span class="sd">        resource: The resource to be updated</span>
+<span class="sd">        description: Description of the suggestion</span>
+<span class="sd">        suggestion_id: Unique identifier for the suggestion</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">lesson_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">resource</span><span class="p">:</span> <span class="n">Resource</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">suggestion_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="LearningTrackMetadata"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LearningTrackMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Metadata of a Learning Track.</span>
+<span class="sd">    learning_track_id: Unique identifier for the learning track</span>
+<span class="sd">    title: Title of the learning track</span>
+<span class="sd">    is_draft: Indicates whether the learning track is a draft or published</span>
+<span class="sd">    is_private: Indicates if the learning track is private</span>
+<span class="sd">    career: Associated career for the learning track</span>
+<span class="sd">    description: Description of the learning track</span>
+<span class="sd">    thumbnail_image: URL to the thumbnail image of the learning track</span>
+<span class="sd">    tags: List of tags related to the learning track</span>
+<span class="sd">    createdBy: Creator of the Learning Track</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">title</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">is_draft</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">is_private</span><span class="p">:</span> <span class="nb">bool</span>
+    <span class="n">career</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">description</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">thumbnail_image</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">tags</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+    <span class="n">createdBy</span><span class="p">:</span> <span class="n">Creator</span>
+    <span class="n">career_path</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">level</span><span class="p">:</span> <span class="n">LevelEnum</span></div>
+
+
+<div class="viewcode-block" id="AllLearningTracks"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.AllLearningTracks">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">AllLearningTracks</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;&quot;</span>
+<span class="sd">    Data of all Learning Tracks.</span>
+<span class="sd">    learning_tracks: List of Learning Tracks</span>
+<span class="sd">    hasResults: Indicates if the search has results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">learning_tracks</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackMetadata</span><span class="p">]</span>
+    <span class="n">hasResults</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="ResourceProgress"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">ResourceProgress</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Resource Progress.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        resource_id: Unique identifier for the resource</span>
+<span class="sd">        completed: Indicates whether the resource has been completed</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">resource_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">completed</span><span class="p">:</span> <span class="nb">bool</span></div>
+
+
+<div class="viewcode-block" id="UserProgress"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.UserProgress">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">UserProgress</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User progress for a learning track.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        progress: List of learning tracks and their progress.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">progress</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">ResourceProgress</span><span class="p">]</span>
+    <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="LearningTrackCommit"><a class="viewcode-back" href="../../../app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">LearningTrackCommit</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Data of a Learning Track Commit.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        change_id: Unique identifier for the commit</span>
+<span class="sd">        change_date: Date of the commit</span>
+<span class="sd">        change_message: Message of the commit</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">change_id</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="c1"># short_id: str</span>
+    <span class="n">change_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+    <span class="c1"># parent_ids: list</span>
+    <span class="c1"># title: str</span>
+    <span class="n">change_message</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="c1"># author_name: str</span>
+    <span class="c1"># author_email: str</span>
+    <span class="c1"># authored_date: datetime.datetime</span>
+    <span class="c1"># committer_name: str</span>
+    <span class="c1"># committer_email: str</span>
+    <span class="c1"># committed_date: datetime.datetime</span>
+    <span class="c1"># trailers: dict</span>
+    <span class="c1"># web_url: str</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

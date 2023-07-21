@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.tokens &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app.tokens</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for app.tokens</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Tokens for the Career Center.</span>
+
+<span class="sd">This module contains the tokens for the Career Center. The tokens are used</span>
+<span class="sd">to authenticate the user to the Career Center.</span>
+
+<span class="sd">The tokens are encoded as JWTs, conforming to RFC 7519.</span>
+<span class="sd">The JWTs are signed with a secret key, and the signature is verified when</span>
+<span class="sd">decoding the JWTs.</span>
+
+<span class="sd">For more information about JWTs, see https://jwt.io/introduction.</span>
+<span class="sd">For more information about the RFC, see https://tools.ietf.org/html/rfc7519.</span>
+<span class="sd">For more information about the Python library used to encode and decode JWTs,</span>
+<span class="sd">see https://pyjwt.readthedocs.io/en/stable/.</span>
+<span class="sd">For more information about the JWT public claims, see</span>
+<span class="sd">https://www.iana.org/assignments/jwt/jwt.xhtml.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">time</span> <span class="k">as</span> <span class="nn">_time</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span> <span class="k">as</span> <span class="n">_dataclass</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">field</span> <span class="k">as</span> <span class="n">_field</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Type</span> <span class="k">as</span> <span class="n">_Type</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Final</span> <span class="k">as</span> <span class="n">_Final</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TypeVar</span> <span class="k">as</span> <span class="n">_TypeVar</span>
+
+<span class="kn">import</span> <span class="nn">jwt</span> <span class="k">as</span> <span class="nn">_jwt</span>
+
+<span class="kn">from</span> <span class="nn">app</span> <span class="kn">import</span> <span class="n">gitlab_facade</span> <span class="k">as</span> <span class="n">_gitlab</span>
+<span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">from_dict</span> <span class="k">as</span> <span class="n">_from_dict</span>
+<span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">to_dict</span> <span class="k">as</span> <span class="n">_to_dict</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;CareerCenterToken&quot;</span><span class="p">,</span> <span class="s2">&quot;CareerCenterRefreshToken&quot;</span><span class="p">,</span> <span class="s2">&quot;decode_token&quot;</span><span class="p">,</span>
+           <span class="s2">&quot;encode_token&quot;</span><span class="p">]</span>
+
+<span class="n">AUDIENCE</span><span class="p">:</span> <span class="n">_Final</span> <span class="o">=</span> <span class="s2">&quot;careercenter&quot;</span>  <span class="c1"># Audience for the token</span>
+<span class="n">ISSUER</span><span class="p">:</span> <span class="n">_Final</span> <span class="o">=</span> <span class="n">AUDIENCE</span>  <span class="c1"># Issuer of the token</span>
+<span class="n">ALGORITHM</span><span class="p">:</span> <span class="n">_Final</span> <span class="o">=</span> <span class="s2">&quot;HS256&quot;</span>  <span class="c1"># Sign tokens using HMAC with SHA-256</span>
+
+
+<div class="viewcode-block" id="CareerCenterToken"><a class="viewcode-back" href="../../app.html#app.tokens.CareerCenterToken">[docs]</a><span class="nd">@_dataclass</span>
+<span class="k">class</span> <span class="nc">CareerCenterToken</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Career Center token.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        gitlab_token: Gitlab token.</span>
+<span class="sd">        exp: Seconds since epoch for expiration date.</span>
+<span class="sd">        sub: ID of the user.</span>
+<span class="sd">        aud: Audience.</span>
+<span class="sd">        iss: Issuer.</span>
+<span class="sd">        iat: Seconds since epoch for issue date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gitlab_access_token</span><span class="p">:</span> <span class="n">_gitlab</span><span class="o">.</span><span class="n">GitlabAccessToken</span>
+    <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">sub</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">aud</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">AUDIENCE</span>
+    <span class="n">iss</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ISSUER</span>
+    <span class="n">iat</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span></div>
+    <span class="c1"># Can add jti if we want to revoke tokens.</span>
+
+
+<div class="viewcode-block" id="CareerCenterRefreshToken"><a class="viewcode-back" href="../../app.html#app.tokens.CareerCenterRefreshToken">[docs]</a><span class="nd">@_dataclass</span>
+<span class="k">class</span> <span class="nc">CareerCenterRefreshToken</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Career Center refresh token.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        gitlab_refresh_token: Gitlab refresh token.</span>
+<span class="sd">        exp: Seconds since epoch for expiration date.</span>
+<span class="sd">        aud: Audience.</span>
+<span class="sd">        iss: Issuer.</span>
+<span class="sd">        iat: Seconds since epoch for issue date.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">gitlab_refresh_token</span><span class="p">:</span> <span class="n">_gitlab</span><span class="o">.</span><span class="n">GitlabRefreshToken</span>
+    <span class="n">exp</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="n">aud</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">AUDIENCE</span>
+    <span class="n">iss</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">ISSUER</span>
+    <span class="n">iat</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">_field</span><span class="p">(</span>
+        <span class="n">default_factory</span><span class="o">=</span><span class="k">lambda</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">_time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span></div>
+    <span class="c1"># Can add jti if we want to revoke tokens.</span>
+
+
+<span class="n">Token</span> <span class="o">=</span> <span class="n">_TypeVar</span><span class="p">(</span><span class="s2">&quot;Token&quot;</span><span class="p">,</span> <span class="n">CareerCenterToken</span><span class="p">,</span> <span class="n">CareerCenterRefreshToken</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="encode_token"><a class="viewcode-back" href="../../app.html#app.tokens.encode_token">[docs]</a><span class="k">def</span> <span class="nf">encode_token</span><span class="p">(</span>
+        <span class="n">token</span><span class="p">:</span> <span class="n">Token</span><span class="p">,</span>
+        <span class="n">secret</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Encode a Career Center token to a JWT.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        token: Token to encode.</span>
+<span class="sd">        secret: Secret to use for encoding.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A JWT.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="n">payload</span><span class="o">=</span><span class="n">_to_dict</span><span class="p">(</span><span class="n">token</span><span class="p">),</span>
+        <span class="n">key</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span>
+        <span class="n">algorithm</span><span class="o">=</span><span class="n">ALGORITHM</span>
+    <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="decode_token"><a class="viewcode-back" href="../../app.html#app.tokens.decode_token">[docs]</a><span class="k">def</span> <span class="nf">decode_token</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">secret</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span>
+                 <span class="n">token_cls</span><span class="p">:</span> <span class="n">_Type</span><span class="p">[</span><span class="n">Token</span><span class="p">]</span>
+                 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Token</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Decode a Career Center token from a JWT.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        token: JWT to decode.</span>
+<span class="sd">        secret: Secret to use for decoding.</span>
+<span class="sd">        token_cls: Class of the token to decode.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        A Career Center token.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If the token is invalid.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">decoded</span><span class="p">:</span> <span class="n">Token</span> <span class="o">=</span> <span class="n">_from_dict</span><span class="p">(</span><span class="n">token_cls</span><span class="p">,</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span>
+            <span class="n">jwt</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+            <span class="n">key</span><span class="o">=</span><span class="n">secret</span><span class="p">,</span>
+            <span class="n">algorithms</span><span class="o">=</span><span class="p">[</span><span class="n">ALGORITHM</span><span class="p">],</span>
+            <span class="n">audience</span><span class="o">=</span><span class="n">AUDIENCE</span><span class="p">,</span>
+            <span class="n">issuer</span><span class="o">=</span><span class="n">ISSUER</span>
+        <span class="p">))</span>
+    <span class="k">except</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">ExpiredSignatureError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Token expired.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">InvalidAudienceError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid audience.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">InvalidIssuerError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid issuer.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">InvalidSignatureError</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid signature.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="kc">None</span>
+
+    <span class="k">except</span> <span class="n">_jwt</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">InvalidTokenError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid token.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+
+    <span class="k">return</span> <span class="n">decoded</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

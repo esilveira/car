@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app package &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">app package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.main">app.main module</a><ul>
+<li><a class="reference internal" href="#app.main.AllLearningTracksProgress"><code class="docutils literal notranslate"><span class="pre">AllLearningTracksProgress</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.AllLearningTracksProgress.progress"><code class="docutils literal notranslate"><span class="pre">AllLearningTracksProgress.progress</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.AppSettings"><code class="docutils literal notranslate"><span class="pre">AppSettings</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.AppSettings.Config"><code class="docutils literal notranslate"><span class="pre">AppSettings.Config</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.AppSettings.Config.env_file"><code class="docutils literal notranslate"><span class="pre">AppSettings.Config.env_file</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.AppSettings.gitlab_admin_pass"><code class="docutils literal notranslate"><span class="pre">AppSettings.gitlab_admin_pass</span></code></a></li>
+<li><a class="reference internal" href="#app.main.AppSettings.jwt_secret"><code class="docutils literal notranslate"><span class="pre">AppSettings.jwt_secret</span></code></a></li>
+<li><a class="reference internal" href="#app.main.AppSettings.loglevel"><code class="docutils literal notranslate"><span class="pre">AppSettings.loglevel</span></code></a></li>
+<li><a class="reference internal" href="#app.main.AppSettings.register_enabled"><code class="docutils literal notranslate"><span class="pre">AppSettings.register_enabled</span></code></a></li>
+<li><a class="reference internal" href="#app.main.AppSettings.validate_loglevel"><code class="docutils literal notranslate"><span class="pre">AppSettings.validate_loglevel()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.CreateLearningTrackResponse"><code class="docutils literal notranslate"><span class="pre">CreateLearningTrackResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.CreateLearningTrackResponse.learning_track_id"><code class="docutils literal notranslate"><span class="pre">CreateLearningTrackResponse.learning_track_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.Credentials"><code class="docutils literal notranslate"><span class="pre">Credentials</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.Credentials.password"><code class="docutils literal notranslate"><span class="pre">Credentials.password</span></code></a></li>
+<li><a class="reference internal" href="#app.main.Credentials.username"><code class="docutils literal notranslate"><span class="pre">Credentials.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.GetProgressResponse"><code class="docutils literal notranslate"><span class="pre">GetProgressResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.GetProgressResponse.progress"><code class="docutils literal notranslate"><span class="pre">GetProgressResponse.progress</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.LearningTrackHistoryDiffResponse"><code class="docutils literal notranslate"><span class="pre">LearningTrackHistoryDiffResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.LearningTrackHistoryDiffResponse.file"><code class="docutils literal notranslate"><span class="pre">LearningTrackHistoryDiffResponse.file</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.LoginResponse"><code class="docutils literal notranslate"><span class="pre">LoginResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.LoginResponse.Config"><code class="docutils literal notranslate"><span class="pre">LoginResponse.Config</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.LoginResponse.Config.orm_mode"><code class="docutils literal notranslate"><span class="pre">LoginResponse.Config.orm_mode</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.LoginResponse.access_token"><code class="docutils literal notranslate"><span class="pre">LoginResponse.access_token</span></code></a></li>
+<li><a class="reference internal" href="#app.main.LoginResponse.expires_in"><code class="docutils literal notranslate"><span class="pre">LoginResponse.expires_in</span></code></a></li>
+<li><a class="reference internal" href="#app.main.LoginResponse.refresh_token"><code class="docutils literal notranslate"><span class="pre">LoginResponse.refresh_token</span></code></a></li>
+<li><a class="reference internal" href="#app.main.LoginResponse.user_info"><code class="docutils literal notranslate"><span class="pre">LoginResponse.user_info</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.RefreshResponse"><code class="docutils literal notranslate"><span class="pre">RefreshResponse</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.RefreshResponse.access_token"><code class="docutils literal notranslate"><span class="pre">RefreshResponse.access_token</span></code></a></li>
+<li><a class="reference internal" href="#app.main.RefreshResponse.expires_in"><code class="docutils literal notranslate"><span class="pre">RefreshResponse.expires_in</span></code></a></li>
+<li><a class="reference internal" href="#app.main.RefreshResponse.refresh_token"><code class="docutils literal notranslate"><span class="pre">RefreshResponse.refresh_token</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.RegisterRequest"><code class="docutils literal notranslate"><span class="pre">RegisterRequest</span></code></a><ul>
+<li><a class="reference internal" href="#app.main.RegisterRequest.email"><code class="docutils literal notranslate"><span class="pre">RegisterRequest.email</span></code></a></li>
+<li><a class="reference internal" href="#app.main.RegisterRequest.full_name"><code class="docutils literal notranslate"><span class="pre">RegisterRequest.full_name</span></code></a></li>
+<li><a class="reference internal" href="#app.main.RegisterRequest.password"><code class="docutils literal notranslate"><span class="pre">RegisterRequest.password</span></code></a></li>
+<li><a class="reference internal" href="#app.main.RegisterRequest.username"><code class="docutils literal notranslate"><span class="pre">RegisterRequest.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.main.cached"><code class="docutils literal notranslate"><span class="pre">cached()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.copy_learning_track"><code class="docutils literal notranslate"><span class="pre">copy_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.create_app"><code class="docutils literal notranslate"><span class="pre">create_app()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.delete_learning_track"><code class="docutils literal notranslate"><span class="pre">delete_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.edit_learning_track"><code class="docutils literal notranslate"><span class="pre">edit_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_admin_gitlab"><code class="docutils literal notranslate"><span class="pre">get_admin_gitlab()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_aiohttp_session"><code class="docutils literal notranslate"><span class="pre">get_aiohttp_session()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_all_learning_tracks"><code class="docutils literal notranslate"><span class="pre">get_all_learning_tracks()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_all_progress"><code class="docutils literal notranslate"><span class="pre">get_all_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_app_local_state"><code class="docutils literal notranslate"><span class="pre">get_app_local_state()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_app_settings"><code class="docutils literal notranslate"><span class="pre">get_app_settings()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_authenticated_gitlab"><code class="docutils literal notranslate"><span class="pre">get_authenticated_gitlab()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_gitlab"><code class="docutils literal notranslate"><span class="pre">get_gitlab()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_gitlab_config"><code class="docutils literal notranslate"><span class="pre">get_gitlab_config()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_learning_track"><code class="docutils literal notranslate"><span class="pre">get_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_learning_track_commits"><code class="docutils literal notranslate"><span class="pre">get_learning_track_commits()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_learning_track_history"><code class="docutils literal notranslate"><span class="pre">get_learning_track_history()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_progress"><code class="docutils literal notranslate"><span class="pre">get_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_suggestions"><code class="docutils literal notranslate"><span class="pre">get_suggestions()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.get_token"><code class="docutils literal notranslate"><span class="pre">get_token()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.healthcheck"><code class="docutils literal notranslate"><span class="pre">healthcheck()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.lifespan_context"><code class="docutils literal notranslate"><span class="pre">lifespan_context()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.login"><code class="docutils literal notranslate"><span class="pre">login()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.manage_suggestion"><code class="docutils literal notranslate"><span class="pre">manage_suggestion()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.post_learning_track"><code class="docutils literal notranslate"><span class="pre">post_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.post_suggestions"><code class="docutils literal notranslate"><span class="pre">post_suggestions()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.put_progress"><code class="docutils literal notranslate"><span class="pre">put_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.refresh"><code class="docutils literal notranslate"><span class="pre">refresh()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.register"><code class="docutils literal notranslate"><span class="pre">register()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.revert_learning_track"><code class="docutils literal notranslate"><span class="pre">revert_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.main.setup_logging"><code class="docutils literal notranslate"><span class="pre">setup_logging()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app.serialize">app.serialize module</a><ul>
+<li><a class="reference internal" href="#app.serialize.from_dict"><code class="docutils literal notranslate"><span class="pre">from_dict()</span></code></a></li>
+<li><a class="reference internal" href="#app.serialize.to_dict"><code class="docutils literal notranslate"><span class="pre">to_dict()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app.tokens">app.tokens module</a><ul>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken</span></code></a><ul>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken.aud"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken.aud</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken.exp"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken.exp</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken.gitlab_refresh_token"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken.gitlab_refresh_token</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken.iat"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken.iat</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterRefreshToken.iss"><code class="docutils literal notranslate"><span class="pre">CareerCenterRefreshToken.iss</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken</span></code></a><ul>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.aud"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.aud</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.exp"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.exp</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.gitlab_access_token"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.gitlab_access_token</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.iat"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.iat</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.iss"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.iss</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.CareerCenterToken.sub"><code class="docutils literal notranslate"><span class="pre">CareerCenterToken.sub</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.tokens.decode_token"><code class="docutils literal notranslate"><span class="pre">decode_token()</span></code></a></li>
+<li><a class="reference internal" href="#app.tokens.encode_token"><code class="docutils literal notranslate"><span class="pre">encode_token()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">app package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/app.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="app-package">
+<h1>app package<a class="headerlink" href="#app-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="app.gitlab_facade.html">app.gitlab_facade package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="app.gitlab_facade.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="app.gitlab_facade.html#module-app.gitlab_facade.exceptions">app.gitlab_facade.exceptions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.EntityAlreadyExists"><code class="docutils literal notranslate"><span class="pre">EntityAlreadyExists</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.EntityAlreadyExists.entity"><code class="docutils literal notranslate"><span class="pre">EntityAlreadyExists.entity</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.GitlabError"><code class="docutils literal notranslate"><span class="pre">GitlabError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.GitlabLookupError"><code class="docutils literal notranslate"><span class="pre">GitlabLookupError</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.GitlabLookupError.resource_type"><code class="docutils literal notranslate"><span class="pre">GitlabLookupError.resource_type</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.InvalidCredentialsError"><code class="docutils literal notranslate"><span class="pre">InvalidCredentialsError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.InvalidFileSizeError"><code class="docutils literal notranslate"><span class="pre">InvalidFileSizeError</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.LookupErrors"><code class="docutils literal notranslate"><span class="pre">LookupErrors</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.LookupErrors.commit"><code class="docutils literal notranslate"><span class="pre">LookupErrors.commit</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.LookupErrors.learning_track"><code class="docutils literal notranslate"><span class="pre">LookupErrors.learning_track</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.exceptions.Unauthorized"><code class="docutils literal notranslate"><span class="pre">Unauthorized</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.gitlab_facade.html#module-app.gitlab_facade.images">app.gitlab_facade.images module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.images.GitlabImage"><code class="docutils literal notranslate"><span class="pre">GitlabImage</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.images.GitlabImage.get_image"><code class="docutils literal notranslate"><span class="pre">GitlabImage.get_image()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.images.GitlabImage.resize_image"><code class="docutils literal notranslate"><span class="pre">GitlabImage.resize_image()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.gitlab_facade.html#module-app.gitlab_facade.models">app.gitlab_facade.models module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.AllLearningTracks"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.AllLearningTracks.hasResults"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks.hasResults</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.AllLearningTracks.learning_tracks"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks.learning_tracks</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Creator"><code class="docutils literal notranslate"><span class="pre">Creator</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Creator.avatar"><code class="docutils literal notranslate"><span class="pre">Creator.avatar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Creator.creator_id"><code class="docutils literal notranslate"><span class="pre">Creator.creator_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Creator.name"><code class="docutils literal notranslate"><span class="pre">Creator.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Creator.username"><code class="docutils literal notranslate"><span class="pre">Creator.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit.change_date"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit.change_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit.change_message"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_message</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData"><code class="docutils literal notranslate"><span class="pre">LearningTrackData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.career"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.career</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.career_path"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.career_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.createdBy"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.createdBy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.is_draft"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.is_draft</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.is_private"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.is_private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.learning_track_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.learning_track_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.lessons"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.lessons</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.level"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.skills"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.skills</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.tags"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.thumbnail_image"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.thumbnail_image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData.title"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.career"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.career</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.career_path"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.career_path</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.createdBy"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.createdBy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.is_draft"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.is_draft</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.is_private"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.is_private</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.learning_track_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.learning_track_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.level"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.level</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.tags"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.tags</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.thumbnail_image"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.thumbnail_image</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackMetadata.title"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.description</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion.lesson_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.lesson_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion.name"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion.resource"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.resource</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion.suggestion_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.suggestion_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Lesson"><code class="docutils literal notranslate"><span class="pre">Lesson</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Lesson.lesson_id"><code class="docutils literal notranslate"><span class="pre">Lesson.lesson_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Lesson.name"><code class="docutils literal notranslate"><span class="pre">Lesson.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Lesson.resources"><code class="docutils literal notranslate"><span class="pre">Lesson.resources</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LevelEnum"><code class="docutils literal notranslate"><span class="pre">LevelEnum</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LevelEnum.beginner"><code class="docutils literal notranslate"><span class="pre">LevelEnum.beginner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LevelEnum.expert"><code class="docutils literal notranslate"><span class="pre">LevelEnum.expert</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LevelEnum.intermediate"><code class="docutils literal notranslate"><span class="pre">LevelEnum.intermediate</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.RegisterData"><code class="docutils literal notranslate"><span class="pre">RegisterData</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.RegisterData.email"><code class="docutils literal notranslate"><span class="pre">RegisterData.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.RegisterData.name"><code class="docutils literal notranslate"><span class="pre">RegisterData.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.RegisterData.password"><code class="docutils literal notranslate"><span class="pre">RegisterData.password</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.RegisterData.username"><code class="docutils literal notranslate"><span class="pre">RegisterData.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource"><code class="docutils literal notranslate"><span class="pre">Resource</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.addedBy"><code class="docutils literal notranslate"><span class="pre">Resource.addedBy</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.duration"><code class="docutils literal notranslate"><span class="pre">Resource.duration</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.link"><code class="docutils literal notranslate"><span class="pre">Resource.link</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.resource_id"><code class="docutils literal notranslate"><span class="pre">Resource.resource_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.resource_type"><code class="docutils literal notranslate"><span class="pre">Resource.resource_type</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.source"><code class="docutils literal notranslate"><span class="pre">Resource.source</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.Resource.title"><code class="docutils literal notranslate"><span class="pre">Resource.title</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress"><code class="docutils literal notranslate"><span class="pre">ResourceProgress</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress.completed"><code class="docutils literal notranslate"><span class="pre">ResourceProgress.completed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress.resource_id"><code class="docutils literal notranslate"><span class="pre">ResourceProgress.resource_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum.article"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.article</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum.book"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.book</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum.course"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.course</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceTypeEnum.video"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.video</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo"><code class="docutils literal notranslate"><span class="pre">UserInfo</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo.email"><code class="docutils literal notranslate"><span class="pre">UserInfo.email</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo.id"><code class="docutils literal notranslate"><span class="pre">UserInfo.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo.name"><code class="docutils literal notranslate"><span class="pre">UserInfo.name</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo.username"><code class="docutils literal notranslate"><span class="pre">UserInfo.username</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress"><code class="docutils literal notranslate"><span class="pre">UserProgress</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress.learning_track_id"><code class="docutils literal notranslate"><span class="pre">UserProgress.learning_track_id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress.progress"><code class="docutils literal notranslate"><span class="pre">UserProgress.progress</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="app.gitlab_facade.html#module-app.gitlab_facade">Module contents</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab"><code class="docutils literal notranslate"><span class="pre">Gitlab</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.access_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.copy_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.copy_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.delete_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.delete_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.edit_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.edit_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track_commits"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track_commits()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track_progress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_tracks"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_tracks()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_tracks_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_tracks_progress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_open_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_open_suggestions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_root_long_term_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_root_long_term_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_snippet_id"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_snippet_id()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_suggestions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_user_info"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_user_info()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.login"><code class="docutils literal notranslate"><span class="pre">Gitlab.login()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.manage_suggestion"><code class="docutils literal notranslate"><span class="pre">Gitlab.manage_suggestion()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.max_timeout"><code class="docutils literal notranslate"><span class="pre">Gitlab.max_timeout</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.post_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.post_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.post_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.post_suggestions()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.put_learning_track_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.put_learning_track_progress()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.refresh_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.refresh_token()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.register"><code class="docutils literal notranslate"><span class="pre">Gitlab.register()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.revert_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.revert_learning_track()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab.user_info"><code class="docutils literal notranslate"><span class="pre">Gitlab.user_info</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabConfig"><code class="docutils literal notranslate"><span class="pre">GitlabConfig</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabConfig.gitlab_hostname"><code class="docutils literal notranslate"><span class="pre">GitlabConfig.gitlab_hostname</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabToken"><code class="docutils literal notranslate"><span class="pre">GitlabToken</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabToken.access_token"><code class="docutils literal notranslate"><span class="pre">GitlabToken.access_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabToken.expiration_date"><code class="docutils literal notranslate"><span class="pre">GitlabToken.expiration_date</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabToken.refresh_token"><code class="docutils literal notranslate"><span class="pre">GitlabToken.refresh_token</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabToken.token_type"><code class="docutils literal notranslate"><span class="pre">GitlabToken.token_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-app.main">
+<span id="app-main-module"></span><h2>app.main module<a class="headerlink" href="#module-app.main" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.AllLearningTracksProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">AllLearningTracksProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">app.gitlab_facade.models.UserProgress</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#AllLearningTracksProgress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.AllLearningTracksProgress" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AllLearningTracksProgress.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">app.gitlab_facade.models.UserProgress</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.main.AllLearningTracksProgress.progress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.AppSettings">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">AppSettings</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">_env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'&lt;object</span> <span class="pre">object&gt;'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_file_encoding</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_env_nested_delimiter</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_secrets_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">PathLike</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">jwt_secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_admin_pass</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GitlabAccessToken</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">register_enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">loglevel</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'INFO'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_admin_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#AppSettings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.AppSettings" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseSettings</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.AppSettings.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/app/main.html#AppSettings.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.AppSettings.Config" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AppSettings.Config.env_file">
+<span class="sig-name descname"><span class="pre">env_file</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'.env'</span></em><a class="headerlink" href="#app.main.AppSettings.Config.env_file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AppSettings.gitlab_admin_pass">
+<span class="sig-name descname"><span class="pre">gitlab_admin_pass</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabAccessToken</span></em><a class="headerlink" href="#app.main.AppSettings.gitlab_admin_pass" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AppSettings.jwt_secret">
+<span class="sig-name descname"><span class="pre">jwt_secret</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.AppSettings.jwt_secret" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AppSettings.loglevel">
+<span class="sig-name descname"><span class="pre">loglevel</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.AppSettings.loglevel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.AppSettings.register_enabled">
+<span class="sig-name descname"><span class="pre">register_enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.main.AppSettings.register_enabled" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.main.AppSettings.validate_loglevel">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_loglevel</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#AppSettings.validate_loglevel"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.AppSettings.validate_loglevel" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.CreateLearningTrackResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">CreateLearningTrackResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#CreateLearningTrackResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.CreateLearningTrackResponse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.CreateLearningTrackResponse.learning_track_id">
+<span class="sig-name descname"><span class="pre">learning_track_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.main.CreateLearningTrackResponse.learning_track_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.Credentials">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">Credentials</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#Credentials"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.Credentials" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.Credentials.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.Credentials.password" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.Credentials.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.Credentials.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.GetProgressResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">GetProgressResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress" title="app.gitlab_facade.models.ResourceProgress"><span class="pre">app.gitlab_facade.models.ResourceProgress</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#GetProgressResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.GetProgressResponse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.GetProgressResponse.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.ResourceProgress" title="app.gitlab_facade.models.ResourceProgress"><span class="pre">app.gitlab_facade.models.ResourceProgress</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.main.GetProgressResponse.progress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.LearningTrackHistoryDiffResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">LearningTrackHistoryDiffResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#LearningTrackHistoryDiffResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.LearningTrackHistoryDiffResponse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LearningTrackHistoryDiffResponse.file">
+<span class="sig-name descname"><span class="pre">file</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.LearningTrackHistoryDiffResponse.file" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.LoginResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">LoginResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">user_info</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo" title="app.gitlab_facade.models.UserInfo"><span class="pre">UserInfo</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#LoginResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.LoginResponse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.LoginResponse.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Config</span></span><a class="reference internal" href="_modules/app/main.html#LoginResponse.Config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.LoginResponse.Config" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LoginResponse.Config.orm_mode">
+<span class="sig-name descname"><span class="pre">orm_mode</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#app.main.LoginResponse.Config.orm_mode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LoginResponse.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.LoginResponse.access_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LoginResponse.expires_in">
+<span class="sig-name descname"><span class="pre">expires_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.main.LoginResponse.expires_in" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LoginResponse.refresh_token">
+<span class="sig-name descname"><span class="pre">refresh_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.LoginResponse.refresh_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.LoginResponse.user_info">
+<span class="sig-name descname"><span class="pre">user_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserInfo" title="app.gitlab_facade.models.UserInfo"><span class="pre">UserInfo</span></a></em><a class="headerlink" href="#app.main.LoginResponse.user_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.RefreshResponse">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">RefreshResponse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expires_in</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#RefreshResponse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.RefreshResponse" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RefreshResponse.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.RefreshResponse.access_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RefreshResponse.expires_in">
+<span class="sig-name descname"><span class="pre">expires_in</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.main.RefreshResponse.expires_in" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RefreshResponse.refresh_token">
+<span class="sig-name descname"><span class="pre">refresh_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.RefreshResponse.refresh_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.main.RegisterRequest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">RegisterRequest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">EmailStr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">full_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#RegisterRequest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.RegisterRequest" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseModel</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RegisterRequest.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">EmailStr</span></em><a class="headerlink" href="#app.main.RegisterRequest.email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RegisterRequest.full_name">
+<span class="sig-name descname"><span class="pre">full_name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.RegisterRequest.full_name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RegisterRequest.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.RegisterRequest.password" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.main.RegisterRequest.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.main.RegisterRequest.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.cached">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">cached</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">_P</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">_T</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/main.html#cached"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.cached" title="Permalink to this definition"></a></dt>
+<dd><p>Decorator caching the result of a function.</p>
+<p>The cache only holds the result of the first call to the function. The
+result is stored in the function’s _cache attribute. Subsequent calls to
+the function return the cached result.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>func: Function to cache.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A wrapper around the function.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.copy_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">copy_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.CreateLearningTrackResponse" title="app.main.CreateLearningTrackResponse"><span class="pre">CreateLearningTrackResponse</span></a></span></span><a class="reference internal" href="_modules/app/main.html#copy_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.copy_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Copy a specific learning track by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning track was copied successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.create_app">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">create_app</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#create_app"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.create_app" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.delete_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">delete_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/app/main.html#delete_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.delete_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a specific learning track by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>204 if the learning track was deleted successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.edit_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">edit_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/app/main.html#edit_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.edit_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Edit a specific learning track by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.
+patch: The patch containing the diffs.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning track was edited successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_admin_gitlab">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_admin_gitlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabConfig" title="app.gitlab_facade.GitlabConfig"><span class="pre">GitlabConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.AppSettings" title="app.main.AppSettings"><span class="pre">AppSettings</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_admin_gitlab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_admin_gitlab" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_aiohttp_session">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_aiohttp_session</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">_local</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">ClientSession</span></span></span><a class="reference internal" href="_modules/app/main.html#get_aiohttp_session"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_aiohttp_session" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_all_learning_tracks">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_all_learning_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.AllLearningTracks" title="app.gitlab_facade.models.AllLearningTracks"><span class="pre">AllLearningTracks</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_all_learning_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_all_learning_tracks" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a list of learning tracks based on a search parameter.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>search: The search parameter.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning tracks were retrieved successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_all_progress">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_all_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">app.gitlab_facade.models.UserProgress</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/main.html#get_all_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_all_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve all progress for a user.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>user_id: The user id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the progress was retrieved successfully.
+404 if user not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_app_local_state">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_app_local_state</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">_local</span></span></span><a class="reference internal" href="_modules/app/main.html#get_app_local_state"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_app_local_state" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_app_settings">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_app_settings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.AppSettings" title="app.main.AppSettings"><span class="pre">AppSettings</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_app_settings"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_app_settings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_authenticated_gitlab">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_authenticated_gitlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gitlab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.tokens.CareerCenterToken" title="app.tokens.CareerCenterToken"><span class="pre">CareerCenterToken</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_authenticated_gitlab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_authenticated_gitlab" title="Permalink to this definition"></a></dt>
+<dd><p>Function to get an authenticated gitlab instance.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>gitlab: The gitlab instance.
+token: The token.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The authenticated gitlab instance.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_gitlab">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_gitlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientSession</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabConfig" title="app.gitlab_facade.GitlabConfig"><span class="pre">GitlabConfig</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_gitlab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_gitlab" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_gitlab_config">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_gitlab_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.GitlabConfig" title="app.gitlab_facade.GitlabConfig"><span class="pre">GitlabConfig</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_gitlab_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_gitlab_config" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData" title="app.gitlab_facade.models.LearningTrackData"><span class="pre">LearningTrackData</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a specific learning track by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning track was retrieved successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_learning_track_commits">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_learning_track_commits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackCommit" title="app.gitlab_facade.models.LearningTrackCommit"><span class="pre">app.gitlab_facade.models.LearningTrackCommit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/main.html#get_learning_track_commits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_learning_track_commits" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a specific learning track’s commit by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.
+change_id: The commit id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the commmit was retrieved successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_learning_track_history">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_learning_track_history</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData" title="app.gitlab_facade.models.LearningTrackData"><span class="pre">LearningTrackData</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_learning_track_history"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_learning_track_history" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a specific learning track’s commit by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.
+change_id: The commit id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the commmit was retrieved successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_progress">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.GetProgressResponse" title="app.main.GetProgressResponse"><span class="pre">GetProgressResponse</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Retrieve a specific learning track progress by id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning track progress was retrieved successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_suggestions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion" title="app.gitlab_facade.models.LearningTrackSuggestion"><span class="pre">app.gitlab_facade.models.LearningTrackSuggestion</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/main.html#get_suggestions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_suggestions" title="Permalink to this definition"></a></dt>
+<dd><p>Get open suggestions for a learning track.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the suggestions were retrieved successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.get_token">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">get_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.AppSettings" title="app.main.AppSettings"><span class="pre">AppSettings</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.tokens.CareerCenterToken" title="app.tokens.CareerCenterToken"><span class="pre">CareerCenterToken</span></a></span></span><a class="reference internal" href="_modules/app/main.html#get_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.get_token" title="Permalink to this definition"></a></dt>
+<dd><p>Function to get the token from the request.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>request: The request.
+app_settings: The app settings.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The token.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.healthcheck">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">healthcheck</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#healthcheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.healthcheck" title="Permalink to this definition"></a></dt>
+<dd><p>Healthcheck endpoint.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.lifespan_context">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">lifespan_context</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">FastAPI</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#lifespan_context"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.lifespan_context" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.login">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">credentials</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.Credentials" title="app.main.Credentials"><span class="pre">Credentials</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.AppSettings" title="app.main.AppSettings"><span class="pre">AppSettings</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.LoginResponse" title="app.main.LoginResponse"><span class="pre">LoginResponse</span></a></span></span><a class="reference internal" href="_modules/app/main.html#login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.login" title="Permalink to this definition"></a></dt>
+<dd><p>Login to Career Center.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>username: Username of the user.
+password: Password of the user.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A token for Career Center.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.manage_suggestion">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">manage_suggestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#manage_suggestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.manage_suggestion" title="Permalink to this definition"></a></dt>
+<dd><p>Manage a suggestion for a learning track.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>action: The action to perform on the suggestion (Available values:
+reject, approve).
+learning_track_id: The learning track id.
+suggestion_id: The suggestion id.</p>
+</dd>
+<dt>Returns:</dt><dd><p>201 if the suggestion was managed successfully.
+404 if learning track or suggestion not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.post_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">post_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackData" title="app.gitlab_facade.models.LearningTrackData"><span class="pre">LearningTrackData</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.CreateLearningTrackResponse" title="app.main.CreateLearningTrackResponse"><span class="pre">CreateLearningTrackResponse</span></a></span></span><a class="reference internal" href="_modules/app/main.html#post_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.post_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Create a learning track</p>
+<dl class="simple">
+<dt>Paramether Arg:</dt><dd><p>learning_track: The learning track to be created.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the learning track was created.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.post_suggestions">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">post_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.LearningTrackSuggestion" title="app.gitlab_facade.models.LearningTrackSuggestion"><span class="pre">app.gitlab_facade.models.LearningTrackSuggestion</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#post_suggestions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.post_suggestions" title="Permalink to this definition"></a></dt>
+<dd><p>Create a suggestion for a learning track.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.
+suggestions: The suggestions to create.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the suggestions were created successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.put_progress">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">put_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">UserProgress</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#put_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.put_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Put progress for a user in a learning track.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>user_id: The user id.
+learning_track_id: The learning track id.
+request: The progress to be put.</p>
+</dd>
+<dt>Returns:</dt><dd><p>200 if the progress was put successfully.
+404 if the learning track was not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.refresh">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">refresh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_settings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.AppSettings" title="app.main.AppSettings"><span class="pre">AppSettings</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.main.RefreshResponse" title="app.main.RefreshResponse"><span class="pre">RefreshResponse</span></a></span></span><a class="reference internal" href="_modules/app/main.html#refresh"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.refresh" title="Permalink to this definition"></a></dt>
+<dd><p>Refresh a Career Center token.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>refresh_token: Refresh token.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A new token for Career Center.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.register">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.main.RegisterRequest" title="app.main.RegisterRequest"><span class="pre">RegisterRequest</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.register" title="Permalink to this definition"></a></dt>
+<dd><p>Register a new user.</p>
+<dl class="simple">
+<dt>Body Args:</dt><dd><p>username: Username of the user.
+password: Password of the user.
+email: Email of the user.
+full_name: Full name of the user.</p>
+</dd>
+<dt>Returns:</dt><dd><p>201 if the user was created successfully.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.revert_learning_track">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">revert_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_api</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="app.gitlab_facade.html#app.gitlab_facade.Gitlab" title="app.gitlab_facade.Gitlab"><span class="pre">Gitlab</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#revert_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.revert_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Revert a specific learning track by change_id.</p>
+<dl class="simple">
+<dt>Parameter Args:</dt><dd><p>learning_track_id: The learning track id.
+change_id: The change id to revert to.</p>
+</dd>
+<dt>Returns:</dt><dd><p>201 if the learning track was reverted successfully.
+404 if learning track not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.main.setup_logging">
+<span class="sig-prename descclassname"><span class="pre">app.main.</span></span><span class="sig-name descname"><span class="pre">setup_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/main.html#setup_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.main.setup_logging" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-app.serialize">
+<span id="app-serialize-module"></span><h2>app.serialize module<a class="headerlink" href="#module-app.serialize" title="Permalink to this heading"></a></h2>
+<p>Serialization of dataclasses to JSONable dictionaries.</p>
+<p>This module provides a function to convert dataclasses to JSONable dictionaries
+and a function to convert JSONable dictionaries to dataclasses.</p>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">to_dict</span><span class="p">,</span> <span class="n">from_dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dataclass</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+<span class="gp">... </span>    <span class="n">baz</span><span class="p">:</span> <span class="nb">int</span>
+<span class="gp">... </span>    <span class="n">qux</span><span class="p">:</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_dict</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">{&#39;bar&#39;: &#39;bar&#39;, &#39;baz&#39;: 42, &#39;qux&#39;: &#39;2021-01-01T00:00:00&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">from_dict</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span> <span class="s1">&#39;qux&#39;</span><span class="p">:</span> <span class="s1">&#39;2021-01-01T00:00:00&#39;</span><span class="p">})</span>
+<span class="go">Foo(bar=&#39;bar&#39;, baz=42, qux=datetime.datetime(2021, 1, 1, 0, 0))</span>
+</pre></div>
+</div>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="app.serialize.from_dict">
+<span class="sig-prename descclassname"><span class="pre">app.serialize.</span></span><span class="sig-name descname"><span class="pre">from_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datacls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]]</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_decoders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="reference internal" href="_modules/app/serialize.html#from_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.serialize.from_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a dictionary to a dataclass.</p>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">from_dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dataclass</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+<span class="gp">... </span>    <span class="n">baz</span><span class="p">:</span> <span class="nb">int</span>
+<span class="gp">... </span>    <span class="n">qux</span><span class="p">:</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">from_dict</span><span class="p">(</span><span class="n">Foo</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;bar&#39;</span><span class="p">:</span> <span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="s1">&#39;baz&#39;</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+<span class="gp">... </span><span class="s1">&#39;qux&#39;</span><span class="p">:</span> <span class="s1">&#39;2021-01-01T00:00:00&#39;</span><span class="p">})</span>
+<span class="go">Foo(bar=&#39;bar&#39;, baz=42, qux=datetime.datetime(2021, 1, 1, 0, 0))</span>
+</pre></div>
+</div>
+</dd>
+<dt>Args:</dt><dd><p>datacls: The dataclass to convert to.
+data: The dictionary to convert from.
+type_decoders: A dictionary of type decoders. A type decoder is a</p>
+<blockquote>
+<div><p>function that takes a JSONable value and returns a value of the
+desired type. The default type decoders are:
+- datetime.datetime.fromisoformat for datetime.datetime</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>A dataclass.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.serialize.to_dict">
+<span class="sig-prename descclassname"><span class="pre">app.serialize.</span></span><span class="sig-name descname"><span class="pre">to_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">datacls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Any</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type_encoders</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict[type[typing.Any],</span> <span class="pre">typing.Callable[[typing.Any],</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]]]</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">float</span> <span class="pre">|</span> <span class="pre">bool</span> <span class="pre">|</span> <span class="pre">None</span> <span class="pre">|</span> <span class="pre">list[ForwardRef('_JsonTypes')]</span> <span class="pre">|</span> <span class="pre">dict[str,</span> <span class="pre">ForwardRef('_JsonTypes')]]]</span></span></span><a class="reference internal" href="_modules/app/serialize.html#to_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.serialize.to_dict" title="Permalink to this definition"></a></dt>
+<dd><p>Convert a dataclass to a JSONable dictionary.</p>
+<dl>
+<dt>Example:</dt><dd><div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">to_dict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nd">@dataclass</span>
+<span class="gp">... </span><span class="k">class</span> <span class="nc">Foo</span><span class="p">:</span>
+<span class="gp">... </span>    <span class="n">bar</span><span class="p">:</span> <span class="nb">str</span>
+<span class="gp">... </span>    <span class="n">baz</span><span class="p">:</span> <span class="nb">int</span>
+<span class="gp">... </span>    <span class="n">qux</span><span class="p">:</span> <span class="n">datetime</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">foo</span> <span class="o">=</span> <span class="n">Foo</span><span class="p">(</span><span class="s2">&quot;bar&quot;</span><span class="p">,</span> <span class="mi">42</span><span class="p">,</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">to_dict</span><span class="p">(</span><span class="n">foo</span><span class="p">)</span>
+<span class="go">{&#39;bar&#39;: &#39;bar&#39;, &#39;baz&#39;: 42, &#39;qux&#39;: &#39;2021-01-01T00:00:00&#39;}</span>
+</pre></div>
+</div>
+</dd>
+<dt>Args:</dt><dd><p>datacls: The dataclass to convert.
+type_encoders: A dictionary of type encoders. A type encoder is a</p>
+<blockquote>
+<div><p>function that takes an object and returns a JSONable object. If a
+type encoder is provided for a type, the type encoder will be used
+instead of the default conversion.</p>
+</div></blockquote>
+</dd>
+<dt>Returns:</dt><dd><p>A dictionary that can be converted to JSON.</p>
+</dd>
+<dt>Raises:</dt><dd><p>TypeError: If the object is not JSONable.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app.tokens">
+<span id="app-tokens-module"></span><h2>app.tokens module<a class="headerlink" href="#module-app.tokens" title="Permalink to this heading"></a></h2>
+<p>Tokens for the Career Center.</p>
+<p>This module contains the tokens for the Career Center. The tokens are used
+to authenticate the user to the Career Center.</p>
+<p>The tokens are encoded as JWTs, conforming to RFC 7519.
+The JWTs are signed with a secret key, and the signature is verified when
+decoding the JWTs.</p>
+<p>For more information about JWTs, see <a class="reference external" href="https://jwt.io/introduction">https://jwt.io/introduction</a>.
+For more information about the RFC, see <a class="reference external" href="https://tools.ietf.org/html/rfc7519">https://tools.ietf.org/html/rfc7519</a>.
+For more information about the Python library used to encode and decode JWTs,
+see <a class="reference external" href="https://pyjwt.readthedocs.io/en/stable/">https://pyjwt.readthedocs.io/en/stable/</a>.
+For more information about the JWT public claims, see
+<a class="reference external" href="https://www.iana.org/assignments/jwt/jwt.xhtml">https://www.iana.org/assignments/jwt/jwt.xhtml</a>.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.tokens.</span></span><span class="sig-name descname"><span class="pre">CareerCenterRefreshToken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gitlab_refresh_token:</span> <span class="pre">~app.gitlab_facade.GitlabRefreshToken</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aud:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'careercenter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iss:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'careercenter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iat:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/tokens.html#CareerCenterRefreshToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Career Center refresh token.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>gitlab_refresh_token: Gitlab refresh token.
+exp: Seconds since epoch for expiration date.
+aud: Audience.
+iss: Issuer.
+iat: Seconds since epoch for issue date.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken.aud">
+<span class="sig-name descname"><span class="pre">aud</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'careercenter'</span></em><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken.aud" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken.exp">
+<span class="sig-name descname"><span class="pre">exp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken.exp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken.gitlab_refresh_token">
+<span class="sig-name descname"><span class="pre">gitlab_refresh_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabRefreshToken</span></em><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken.gitlab_refresh_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken.iat">
+<span class="sig-name descname"><span class="pre">iat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken.iat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterRefreshToken.iss">
+<span class="sig-name descname"><span class="pre">iss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'careercenter'</span></em><a class="headerlink" href="#app.tokens.CareerCenterRefreshToken.iss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.tokens.</span></span><span class="sig-name descname"><span class="pre">CareerCenterToken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gitlab_access_token:</span> <span class="pre">~app.gitlab_facade.GitlabAccessToken</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sub:</span> <span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aud:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'careercenter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iss:</span> <span class="pre">str</span> <span class="pre">=</span> <span class="pre">'careercenter'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iat:</span> <span class="pre">int</span> <span class="pre">=</span> <span class="pre">&lt;factory&gt;</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/tokens.html#CareerCenterToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.tokens.CareerCenterToken" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Career Center token.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>gitlab_token: Gitlab token.
+exp: Seconds since epoch for expiration date.
+sub: ID of the user.
+aud: Audience.
+iss: Issuer.
+iat: Seconds since epoch for issue date.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.aud">
+<span class="sig-name descname"><span class="pre">aud</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'careercenter'</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.aud" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.exp">
+<span class="sig-name descname"><span class="pre">exp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.exp" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.gitlab_access_token">
+<span class="sig-name descname"><span class="pre">gitlab_access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabAccessToken</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.gitlab_access_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.iat">
+<span class="sig-name descname"><span class="pre">iat</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.iat" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.iss">
+<span class="sig-name descname"><span class="pre">iss</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'careercenter'</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.iss" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.tokens.CareerCenterToken.sub">
+<span class="sig-name descname"><span class="pre">sub</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.tokens.CareerCenterToken.sub" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.tokens.decode_token">
+<span class="sig-prename descclassname"><span class="pre">app.tokens.</span></span><span class="sig-name descname"><span class="pre">decode_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_cls</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Type</span><span class="p"><span class="pre">[</span></span><span class="pre">Token</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Token</span></span></span><a class="reference internal" href="_modules/app/tokens.html#decode_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.tokens.decode_token" title="Permalink to this definition"></a></dt>
+<dd><p>Decode a Career Center token from a JWT.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>token: JWT to decode.
+secret: Secret to use for decoding.
+token_cls: Class of the token to decode.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A Career Center token.</p>
+</dd>
+<dt>Raises:</dt><dd><p>ValueError: If the token is invalid.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="app.tokens.encode_token">
+<span class="sig-prename descclassname"><span class="pre">app.tokens.</span></span><span class="sig-name descname"><span class="pre">encode_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">secret</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/app/tokens.html#encode_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.tokens.encode_token" title="Permalink to this definition"></a></dt>
+<dd><p>Encode a Career Center token to a JWT.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>token: Token to encode.
+secret: Secret to use for encoding.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A JWT.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-app">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

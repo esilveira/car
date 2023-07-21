@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.gitlab_facade package &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">app.gitlab_facade package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-app.gitlab_facade.exceptions">app.gitlab_facade.exceptions module</a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.EntityAlreadyExists"><code class="docutils literal notranslate"><span class="pre">EntityAlreadyExists</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.EntityAlreadyExists.entity"><code class="docutils literal notranslate"><span class="pre">EntityAlreadyExists.entity</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError"><code class="docutils literal notranslate"><span class="pre">GitlabError</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabLookupError"><code class="docutils literal notranslate"><span class="pre">GitlabLookupError</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabLookupError.resource_type"><code class="docutils literal notranslate"><span class="pre">GitlabLookupError.resource_type</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.InvalidCredentialsError"><code class="docutils literal notranslate"><span class="pre">InvalidCredentialsError</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.InvalidFileSizeError"><code class="docutils literal notranslate"><span class="pre">InvalidFileSizeError</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.LookupErrors"><code class="docutils literal notranslate"><span class="pre">LookupErrors</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.LookupErrors.commit"><code class="docutils literal notranslate"><span class="pre">LookupErrors.commit</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.LookupErrors.learning_track"><code class="docutils literal notranslate"><span class="pre">LookupErrors.learning_track</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.exceptions.Unauthorized"><code class="docutils literal notranslate"><span class="pre">Unauthorized</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app.gitlab_facade.images">app.gitlab_facade.images module</a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.images.GitlabImage"><code class="docutils literal notranslate"><span class="pre">GitlabImage</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.images.GitlabImage.get_image"><code class="docutils literal notranslate"><span class="pre">GitlabImage.get_image()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.images.GitlabImage.resize_image"><code class="docutils literal notranslate"><span class="pre">GitlabImage.resize_image()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app.gitlab_facade.models">app.gitlab_facade.models module</a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.AllLearningTracks"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.AllLearningTracks.hasResults"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks.hasResults</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.AllLearningTracks.learning_tracks"><code class="docutils literal notranslate"><span class="pre">AllLearningTracks.learning_tracks</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Creator"><code class="docutils literal notranslate"><span class="pre">Creator</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Creator.avatar"><code class="docutils literal notranslate"><span class="pre">Creator.avatar</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Creator.creator_id"><code class="docutils literal notranslate"><span class="pre">Creator.creator_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Creator.name"><code class="docutils literal notranslate"><span class="pre">Creator.name</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Creator.username"><code class="docutils literal notranslate"><span class="pre">Creator.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackCommit"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackCommit.change_date"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_date</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackCommit.change_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackCommit.change_message"><code class="docutils literal notranslate"><span class="pre">LearningTrackCommit.change_message</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData"><code class="docutils literal notranslate"><span class="pre">LearningTrackData</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.career"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.career</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.career_path"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.career_path</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.createdBy"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.createdBy</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.description</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.is_draft"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.is_draft</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.is_private"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.is_private</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.learning_track_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.learning_track_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.lessons"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.lessons</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.level"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.level</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.skills"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.skills</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.tags"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.tags</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.thumbnail_image"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.thumbnail_image</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData.title"><code class="docutils literal notranslate"><span class="pre">LearningTrackData.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.career"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.career</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.career_path"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.career_path</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.createdBy"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.createdBy</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.description</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.is_draft"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.is_draft</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.is_private"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.is_private</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.learning_track_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.learning_track_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.level"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.level</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.tags"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.tags</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.thumbnail_image"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.thumbnail_image</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata.title"><code class="docutils literal notranslate"><span class="pre">LearningTrackMetadata.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion.description"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.description</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion.lesson_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.lesson_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion.name"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.name</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion.resource"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.resource</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion.suggestion_id"><code class="docutils literal notranslate"><span class="pre">LearningTrackSuggestion.suggestion_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Lesson"><code class="docutils literal notranslate"><span class="pre">Lesson</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Lesson.lesson_id"><code class="docutils literal notranslate"><span class="pre">Lesson.lesson_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Lesson.name"><code class="docutils literal notranslate"><span class="pre">Lesson.name</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Lesson.resources"><code class="docutils literal notranslate"><span class="pre">Lesson.resources</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum"><code class="docutils literal notranslate"><span class="pre">LevelEnum</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum.beginner"><code class="docutils literal notranslate"><span class="pre">LevelEnum.beginner</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum.expert"><code class="docutils literal notranslate"><span class="pre">LevelEnum.expert</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum.intermediate"><code class="docutils literal notranslate"><span class="pre">LevelEnum.intermediate</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.RegisterData"><code class="docutils literal notranslate"><span class="pre">RegisterData</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.RegisterData.email"><code class="docutils literal notranslate"><span class="pre">RegisterData.email</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.RegisterData.name"><code class="docutils literal notranslate"><span class="pre">RegisterData.name</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.RegisterData.password"><code class="docutils literal notranslate"><span class="pre">RegisterData.password</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.RegisterData.username"><code class="docutils literal notranslate"><span class="pre">RegisterData.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource"><code class="docutils literal notranslate"><span class="pre">Resource</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.addedBy"><code class="docutils literal notranslate"><span class="pre">Resource.addedBy</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.duration"><code class="docutils literal notranslate"><span class="pre">Resource.duration</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.link"><code class="docutils literal notranslate"><span class="pre">Resource.link</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.resource_id"><code class="docutils literal notranslate"><span class="pre">Resource.resource_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.resource_type"><code class="docutils literal notranslate"><span class="pre">Resource.resource_type</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.source"><code class="docutils literal notranslate"><span class="pre">Resource.source</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.Resource.title"><code class="docutils literal notranslate"><span class="pre">Resource.title</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress"><code class="docutils literal notranslate"><span class="pre">ResourceProgress</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress.completed"><code class="docutils literal notranslate"><span class="pre">ResourceProgress.completed</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress.resource_id"><code class="docutils literal notranslate"><span class="pre">ResourceProgress.resource_id</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum.article"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.article</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum.book"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.book</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum.course"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.course</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum.video"><code class="docutils literal notranslate"><span class="pre">ResourceTypeEnum.video</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserInfo"><code class="docutils literal notranslate"><span class="pre">UserInfo</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserInfo.email"><code class="docutils literal notranslate"><span class="pre">UserInfo.email</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserInfo.id"><code class="docutils literal notranslate"><span class="pre">UserInfo.id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserInfo.name"><code class="docutils literal notranslate"><span class="pre">UserInfo.name</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserInfo.username"><code class="docutils literal notranslate"><span class="pre">UserInfo.username</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserProgress"><code class="docutils literal notranslate"><span class="pre">UserProgress</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserProgress.learning_track_id"><code class="docutils literal notranslate"><span class="pre">UserProgress.learning_track_id</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.models.UserProgress.progress"><code class="docutils literal notranslate"><span class="pre">UserProgress.progress</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-app.gitlab_facade">Module contents</a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab"><code class="docutils literal notranslate"><span class="pre">Gitlab</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.access_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.access_token</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.copy_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.copy_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.delete_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.delete_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.edit_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.edit_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_learning_track_commits"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track_commits()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_learning_track_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_track_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_learning_tracks"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_tracks()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_learning_tracks_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_learning_tracks_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_open_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_open_suggestions()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_root_long_term_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_root_long_term_token()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_snippet_id"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_snippet_id()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_suggestions()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.get_user_info"><code class="docutils literal notranslate"><span class="pre">Gitlab.get_user_info()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.login"><code class="docutils literal notranslate"><span class="pre">Gitlab.login()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.manage_suggestion"><code class="docutils literal notranslate"><span class="pre">Gitlab.manage_suggestion()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.max_timeout"><code class="docutils literal notranslate"><span class="pre">Gitlab.max_timeout</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.post_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.post_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.post_suggestions"><code class="docutils literal notranslate"><span class="pre">Gitlab.post_suggestions()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.put_learning_track_progress"><code class="docutils literal notranslate"><span class="pre">Gitlab.put_learning_track_progress()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.refresh_token"><code class="docutils literal notranslate"><span class="pre">Gitlab.refresh_token()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.register"><code class="docutils literal notranslate"><span class="pre">Gitlab.register()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.revert_learning_track"><code class="docutils literal notranslate"><span class="pre">Gitlab.revert_learning_track()</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.Gitlab.user_info"><code class="docutils literal notranslate"><span class="pre">Gitlab.user_info</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabConfig"><code class="docutils literal notranslate"><span class="pre">GitlabConfig</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabConfig.gitlab_hostname"><code class="docutils literal notranslate"><span class="pre">GitlabConfig.gitlab_hostname</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabToken"><code class="docutils literal notranslate"><span class="pre">GitlabToken</span></code></a><ul>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabToken.access_token"><code class="docutils literal notranslate"><span class="pre">GitlabToken.access_token</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabToken.expiration_date"><code class="docutils literal notranslate"><span class="pre">GitlabToken.expiration_date</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabToken.refresh_token"><code class="docutils literal notranslate"><span class="pre">GitlabToken.refresh_token</span></code></a></li>
+<li><a class="reference internal" href="#app.gitlab_facade.GitlabToken.token_type"><code class="docutils literal notranslate"><span class="pre">GitlabToken.token_type</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">app.gitlab_facade package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/app.gitlab_facade.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="app-gitlab-facade-package">
+<h1>app.gitlab_facade package<a class="headerlink" href="#app-gitlab-facade-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-app.gitlab_facade.exceptions">
+<span id="app-gitlab-facade-exceptions-module"></span><h2>app.gitlab_facade.exceptions module<a class="headerlink" href="#module-app.gitlab_facade.exceptions" title="Permalink to this heading"></a></h2>
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.EntityAlreadyExists">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">EntityAlreadyExists</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#EntityAlreadyExists"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.EntityAlreadyExists" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError" title="app.gitlab_facade.exceptions.GitlabError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitlabError</span></code></a></p>
+<p>An entity already exists.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>entity: The entity that already exists.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.EntityAlreadyExists.entity">
+<span class="sig-name descname"><span class="pre">entity</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">None</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.exceptions.EntityAlreadyExists.entity" title="Permalink to this definition"></a></dt>
+<dd><p>A string representing the entity that already exists.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.GitlabError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">GitlabError</span></span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#GitlabError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.GitlabError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.GitlabLookupError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">GitlabLookupError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.exceptions.LookupErrors" title="app.gitlab_facade.exceptions.LookupErrors"><span class="pre">LookupErrors</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#GitlabLookupError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.GitlabLookupError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError" title="app.gitlab_facade.exceptions.GitlabError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitlabError</span></code></a></p>
+<p>LookupError</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>resource_type: The resource that doen’t exist.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.GitlabLookupError.resource_type">
+<span class="sig-name descname"><span class="pre">resource_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.exceptions.LookupErrors" title="app.gitlab_facade.exceptions.LookupErrors"><span class="pre">LookupErrors</span></a></em><a class="headerlink" href="#app.gitlab_facade.exceptions.GitlabLookupError.resource_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.InvalidCredentialsError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidCredentialsError</span></span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#InvalidCredentialsError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.InvalidCredentialsError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code>, <a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError" title="app.gitlab_facade.exceptions.GitlabError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitlabError</span></code></a></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.InvalidFileSizeError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidFileSizeError</span></span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#InvalidFileSizeError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.InvalidFileSizeError" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code>, <a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError" title="app.gitlab_facade.exceptions.GitlabError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitlabError</span></code></a></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.LookupErrors">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">LookupErrors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#LookupErrors"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.LookupErrors" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.LookupErrors.commit">
+<span class="sig-name descname"><span class="pre">commit</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'commit'</span></em><a class="headerlink" href="#app.gitlab_facade.exceptions.LookupErrors.commit" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.LookupErrors.learning_track">
+<span class="sig-name descname"><span class="pre">learning_track</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'learning_track'</span></em><a class="headerlink" href="#app.gitlab_facade.exceptions.LookupErrors.learning_track" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="app.gitlab_facade.exceptions.Unauthorized">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.exceptions.</span></span><span class="sig-name descname"><span class="pre">Unauthorized</span></span><a class="reference internal" href="_modules/app/gitlab_facade/exceptions.html#Unauthorized"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.exceptions.Unauthorized" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#app.gitlab_facade.exceptions.GitlabError" title="app.gitlab_facade.exceptions.GitlabError"><code class="xref py py-class docutils literal notranslate"><span class="pre">GitlabError</span></code></a></p>
+</dd></dl>
+
+</section>
+<section id="module-app.gitlab_facade.images">
+<span id="app-gitlab-facade-images-module"></span><h2>app.gitlab_facade.images module<a class="headerlink" href="#module-app.gitlab_facade.images" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.images.GitlabImage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.images.</span></span><span class="sig-name descname"><span class="pre">GitlabImage</span></span><a class="reference internal" href="_modules/app/gitlab_facade/images.html#GitlabImage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.images.GitlabImage" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.images.GitlabImage.get_image">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image_bytes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bytes</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gitlab_max_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade/images.html#GitlabImage.get_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.images.GitlabImage.get_image" title="Permalink to this definition"></a></dt>
+<dd><p>_summary_</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>image_bytes (bytes): image as bytearray
+max_size (int): max size allowed by api
+gitlab_max_size (int): max size allowed by gitlab</p>
+</dd>
+<dt>Raises:</dt><dd><p>InvalidFileSizeError: File too big
+ValueError: Invalid image format</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: image to send to gitlab</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.images.GitlabImage.resize_image">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">resize_image</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">image:</span> <span class="pre">&lt;module</span> <span class="pre">'PIL.Image'</span> <span class="pre">from</span> <span class="pre">'/opt/hostedtoolcache/Python/3.11.4/x64/lib/python3.11/site-packages/PIL/Image.py'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_size:</span> <span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bytes</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade/images.html#GitlabImage.resize_image"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.images.GitlabImage.resize_image" title="Permalink to this definition"></a></dt>
+<dd><p>Resizes the image with a simple algorithm to send to gitlab</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>image (Image): image
+max_size (int): max size</p>
+</dd>
+<dt>Returns:</dt><dd><p>bytes: bytes to be sent to gitlab</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-app.gitlab_facade.models">
+<span id="app-gitlab-facade-models-module"></span><h2>app.gitlab_facade.models module<a class="headerlink" href="#module-app.gitlab_facade.models" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.AllLearningTracks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">AllLearningTracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_tracks</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata" title="app.gitlab_facade.models.LearningTrackMetadata"><span class="pre">app.gitlab_facade.models.LearningTrackMetadata</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hasResults</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#AllLearningTracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.AllLearningTracks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>”
+Data of all Learning Tracks.
+learning_tracks: List of Learning Tracks
+hasResults: Indicates if the search has results</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.AllLearningTracks.hasResults">
+<span class="sig-name descname"><span class="pre">hasResults</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.AllLearningTracks.hasResults" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.AllLearningTracks.learning_tracks">
+<span class="sig-name descname"><span class="pre">learning_tracks</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackMetadata" title="app.gitlab_facade.models.LearningTrackMetadata"><span class="pre">app.gitlab_facade.models.LearningTrackMetadata</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.AllLearningTracks.learning_tracks" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Creator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">Creator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">avatar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">creator_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#Creator"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.Creator" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Creator.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>username: Username of the creator.
+name: Name of the cretor.
+avatar: Avatar of the creator.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Creator.avatar">
+<span class="sig-name descname"><span class="pre">avatar</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Creator.avatar" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Creator.creator_id">
+<span class="sig-name descname"><span class="pre">creator_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.gitlab_facade.models.Creator.creator_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Creator.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Creator.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Creator.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Creator.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackCommit">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">LearningTrackCommit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">change_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#LearningTrackCommit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackCommit" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Learning Track Commit.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>change_id: Unique identifier for the commit
+change_date: Date of the commit
+change_message: Message of the commit</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackCommit.change_date">
+<span class="sig-name descname"><span class="pre">change_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackCommit.change_date" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackCommit.change_id">
+<span class="sig-name descname"><span class="pre">change_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackCommit.change_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackCommit.change_message">
+<span class="sig-name descname"><span class="pre">change_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackCommit.change_message" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">LearningTrackData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">is_draft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_private</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">career</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">career_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail_image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum" title="app.gitlab_facade.models.LevelEnum"><span class="pre">LevelEnum</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skills</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lessons</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.Lesson" title="app.gitlab_facade.models.Lesson"><span class="pre">app.gitlab_facade.models.Lesson</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">createdBy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.Creator" title="app.gitlab_facade.models.Creator"><span class="pre">Creator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#LearningTrackData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Learning Track.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>is_draft: Indicates whether the learning track is a draft or published
+is_private: Indicates whether the learning track
+is private or publicly accessible
+title: Title of the learning track
+career: Associated career for the learning track
+career_path: Associated career path for the learning track
+description: Description of the learning track
+thumbnail_image: URL to the thumbnail image of the learning track
+level: Difficulty level of the learning track</p>
+<blockquote>
+<div><p>(beginner, intermediate, or expert)</p>
+</div></blockquote>
+<p>tags: List of tags related to the learning track
+skills: List of skills that the learning track aims to teach
+learning_track_id: Unique identifier for the learning track
+createdBy: Creator of the Learning Track
+lessons: List of Lesson in this Learning Track</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.career">
+<span class="sig-name descname"><span class="pre">career</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.career" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.career_path">
+<span class="sig-name descname"><span class="pre">career_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.career_path" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.createdBy">
+<span class="sig-name descname"><span class="pre">createdBy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.Creator" title="app.gitlab_facade.models.Creator"><span class="pre">Creator</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.createdBy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.is_draft">
+<span class="sig-name descname"><span class="pre">is_draft</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.is_draft" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.is_private" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.learning_track_id">
+<span class="sig-name descname"><span class="pre">learning_track_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.learning_track_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.lessons">
+<span class="sig-name descname"><span class="pre">lessons</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.Lesson" title="app.gitlab_facade.models.Lesson"><span class="pre">app.gitlab_facade.models.Lesson</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.lessons" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum" title="app.gitlab_facade.models.LevelEnum"><span class="pre">LevelEnum</span></a></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.level" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.skills">
+<span class="sig-name descname"><span class="pre">skills</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.skills" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.tags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.thumbnail_image">
+<span class="sig-name descname"><span class="pre">thumbnail_image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.thumbnail_image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackData.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackData.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">LearningTrackMetadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_draft</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_private</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">career</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">thumbnail_image</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tags</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">createdBy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.Creator" title="app.gitlab_facade.models.Creator"><span class="pre">Creator</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">career_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum" title="app.gitlab_facade.models.LevelEnum"><span class="pre">LevelEnum</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#LearningTrackMetadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Metadata of a Learning Track.
+learning_track_id: Unique identifier for the learning track
+title: Title of the learning track
+is_draft: Indicates whether the learning track is a draft or published
+is_private: Indicates if the learning track is private
+career: Associated career for the learning track
+description: Description of the learning track
+thumbnail_image: URL to the thumbnail image of the learning track
+tags: List of tags related to the learning track
+createdBy: Creator of the Learning Track</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.career">
+<span class="sig-name descname"><span class="pre">career</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.career" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.career_path">
+<span class="sig-name descname"><span class="pre">career_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.career_path" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.createdBy">
+<span class="sig-name descname"><span class="pre">createdBy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.Creator" title="app.gitlab_facade.models.Creator"><span class="pre">Creator</span></a></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.createdBy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.is_draft">
+<span class="sig-name descname"><span class="pre">is_draft</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.is_draft" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.is_private">
+<span class="sig-name descname"><span class="pre">is_private</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.is_private" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.learning_track_id">
+<span class="sig-name descname"><span class="pre">learning_track_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.learning_track_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.level">
+<span class="sig-name descname"><span class="pre">level</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.LevelEnum" title="app.gitlab_facade.models.LevelEnum"><span class="pre">LevelEnum</span></a></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.level" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.tags">
+<span class="sig-name descname"><span class="pre">tags</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.tags" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.thumbnail_image">
+<span class="sig-name descname"><span class="pre">thumbnail_image</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.thumbnail_image" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackMetadata.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackMetadata.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">LearningTrackSuggestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lesson_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.Resource" title="app.gitlab_facade.models.Resource"><span class="pre">Resource</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">description</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#LearningTrackSuggestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Learning Track Suggestion.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>lesson_id: Unique identifier for the lesson
+name: Name of the lesson
+resource: The resource to be updated
+description: Description of the suggestion
+suggestion_id: Unique identifier for the suggestion</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion.description">
+<span class="sig-name descname"><span class="pre">description</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion.description" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion.lesson_id">
+<span class="sig-name descname"><span class="pre">lesson_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion.lesson_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion.resource">
+<span class="sig-name descname"><span class="pre">resource</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.Resource" title="app.gitlab_facade.models.Resource"><span class="pre">Resource</span></a></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion.resource" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LearningTrackSuggestion.suggestion_id">
+<span class="sig-name descname"><span class="pre">suggestion_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.models.LearningTrackSuggestion.suggestion_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Lesson">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">Lesson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lesson_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resources</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.Resource" title="app.gitlab_facade.models.Resource"><span class="pre">app.gitlab_facade.models.Resource</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#Lesson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.Lesson" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Lesson.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id: Unique identifier for the resource.
+name: Name of the lesson.
+resources: List of resources.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Lesson.lesson_id">
+<span class="sig-name descname"><span class="pre">lesson_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Lesson.lesson_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Lesson.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Lesson.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Lesson.resources">
+<span class="sig-name descname"><span class="pre">resources</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.Resource" title="app.gitlab_facade.models.Resource"><span class="pre">app.gitlab_facade.models.Resource</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.Lesson.resources" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LevelEnum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">LevelEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#LevelEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.LevelEnum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LevelEnum.beginner">
+<span class="sig-name descname"><span class="pre">beginner</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'beginner'</span></em><a class="headerlink" href="#app.gitlab_facade.models.LevelEnum.beginner" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LevelEnum.expert">
+<span class="sig-name descname"><span class="pre">expert</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'expert'</span></em><a class="headerlink" href="#app.gitlab_facade.models.LevelEnum.expert" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.LevelEnum.intermediate">
+<span class="sig-name descname"><span class="pre">intermediate</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'intermediate'</span></em><a class="headerlink" href="#app.gitlab_facade.models.LevelEnum.intermediate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.RegisterData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">RegisterData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#RegisterData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.RegisterData" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data to register a user.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>username: Username of the user.
+password: Password of the user.
+email: Email of the user.
+full_name: Full name of the user.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.RegisterData.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.RegisterData.email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.RegisterData.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.RegisterData.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.RegisterData.password">
+<span class="sig-name descname"><span class="pre">password</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.RegisterData.password" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.RegisterData.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.RegisterData.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">Resource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">link</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">source</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resource_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum" title="app.gitlab_facade.models.ResourceTypeEnum"><span class="pre">ResourceTypeEnum</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">duration</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">addedBy</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#Resource"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.Resource" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Resource.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>id: Unique identifier for the resource
+link: URL to the resource
+title: Title of the resource
+source: Source of the resource
+type: Type of the resource (e.g., video, article, etc.)
+duration: Duration of the resource in minutes
+addedBy: Name of the user who added the resources</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.addedBy">
+<span class="sig-name descname"><span class="pre">addedBy</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.addedBy" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.duration">
+<span class="sig-name descname"><span class="pre">duration</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.duration" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.link">
+<span class="sig-name descname"><span class="pre">link</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.link" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.resource_id">
+<span class="sig-name descname"><span class="pre">resource_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.resource_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.resource_type">
+<span class="sig-name descname"><span class="pre">resource_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.ResourceTypeEnum" title="app.gitlab_facade.models.ResourceTypeEnum"><span class="pre">ResourceTypeEnum</span></a></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.resource_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.source">
+<span class="sig-name descname"><span class="pre">source</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.source" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.Resource.title">
+<span class="sig-name descname"><span class="pre">title</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.Resource.title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">ResourceProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resource_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">completed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#ResourceProgress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.ResourceProgress" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Data of a Resource Progress.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>resource_id: Unique identifier for the resource
+completed: Indicates whether the resource has been completed</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceProgress.completed">
+<span class="sig-name descname"><span class="pre">completed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceProgress.completed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceProgress.resource_id">
+<span class="sig-name descname"><span class="pre">resource_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceProgress.resource_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceTypeEnum">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">ResourceTypeEnum</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#ResourceTypeEnum"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.ResourceTypeEnum" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceTypeEnum.article">
+<span class="sig-name descname"><span class="pre">article</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'article'</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceTypeEnum.article" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceTypeEnum.book">
+<span class="sig-name descname"><span class="pre">book</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'book'</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceTypeEnum.book" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceTypeEnum.course">
+<span class="sig-name descname"><span class="pre">course</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'course'</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceTypeEnum.course" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.ResourceTypeEnum.video">
+<span class="sig-name descname"><span class="pre">video</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'video'</span></em><a class="headerlink" href="#app.gitlab_facade.models.ResourceTypeEnum.video" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserInfo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">UserInfo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">email</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#UserInfo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.UserInfo" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>User information</p>
+<p>Loosely based on
+<a class="reference external" href="https://docs.gitlab.com/ee/integration/openid_connect_provider.html">https://docs.gitlab.com/ee/integration/openid_connect_provider.html</a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserInfo.email">
+<span class="sig-name descname"><span class="pre">email</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.models.UserInfo.email" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserInfo.id">
+<span class="sig-name descname"><span class="pre">id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#app.gitlab_facade.models.UserInfo.id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserInfo.name">
+<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.UserInfo.name" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserInfo.username">
+<span class="sig-name descname"><span class="pre">username</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.models.UserInfo.username" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserProgress">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.models.</span></span><span class="sig-name descname"><span class="pre">UserProgress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress" title="app.gitlab_facade.models.ResourceProgress"><span class="pre">app.gitlab_facade.models.ResourceProgress</span></a><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade/models.html#UserProgress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.models.UserProgress" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>User progress for a learning track.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>progress: List of learning tracks and their progress.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserProgress.learning_track_id">
+<span class="sig-name descname"><span class="pre">learning_track_id</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.models.UserProgress.learning_track_id" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.models.UserProgress.progress">
+<span class="sig-name descname"><span class="pre">progress</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress" title="app.gitlab_facade.models.ResourceProgress"><span class="pre">app.gitlab_facade.models.ResourceProgress</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#app.gitlab_facade.models.UserProgress.progress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-app.gitlab_facade">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-app.gitlab_facade" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.</span></span><span class="sig-name descname"><span class="pre">Gitlab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.GitlabConfig" title="app.gitlab_facade.GitlabConfig"><span class="pre">GitlabConfig</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GitlabAccessToken</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">ClientSession</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Facade for Gitlab APISAS.</p>
+<p>This class is responsible for handling all the interactions with
+Gitlab API.</p>
+<p>Note: All requests can raise an asyncio.TimeoutError if the request
+takes too long.</p>
+<dl>
+<dt>Attributes:</dt><dd><p>config: Gitlab configuration.
+session: aiohttp.ClientSession to use for requests.
+access_token: Access token to use for requests. This token must</p>
+<blockquote>
+<div><p>have the necessary scopes to perform the requests.</p>
+</div></blockquote>
+<p>max_timeout: Maximum timeout for requests in seconds.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabAccessToken</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.Gitlab.access_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.copy_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">copy_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.copy_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.copy_learning_track" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.delete_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">delete_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.delete_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.delete_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Delete a learning track.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LookupError: If the learning track does not exist.
+GitlabError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.edit_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">edit_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">patch</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.edit_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.edit_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Edit a learning track.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>patch: The patch to apply to the learning track.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData" title="app.gitlab_facade.models.LearningTrackData"><span class="pre">LearningTrackData</span></a></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Get a specific Learning Track based on the ID recieved
+Args:</p>
+<blockquote>
+<div><p>learning_track_id: String with the larning track ID to get..
+change_id: Commit id</p>
+</div></blockquote>
+<dl>
+<dt>Returns:</dt><dd><p>The learning track with the ID requested.</p>
+</dd>
+<dt>Raises:</dt><dd><dl class="simple">
+<dt>GitlabLookupError: If the resource track does not exist.</dt><dd><ul class="simple">
+<li><p>commit</p></li>
+<li><p>learning_track</p></li>
+</ul>
+</dd>
+</dl>
+<p>KeyError: If the GitLab return invalid data.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_learning_track_commits">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_learning_track_commits</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackCommit" title="app.gitlab_facade.models.LearningTrackCommit"><span class="pre">app.gitlab_facade.models.LearningTrackCommit</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_learning_track_commits"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_learning_track_commits" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_learning_track_progress">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_learning_track_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">snippet_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.ResourceProgress" title="app.gitlab_facade.models.ResourceProgress"><span class="pre">app.gitlab_facade.models.ResourceProgress</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_learning_track_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_learning_track_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Get the progress of a learning track for a user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user_id: The user ID.
+learning_track_id: The learning track ID.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The learning track progress.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_learning_tracks">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_learning_tracks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">search</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_learning_tracks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_learning_tracks" title="Permalink to this definition"></a></dt>
+<dd><p>Get all Learning Tracks based on the search query</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_learning_tracks_progress">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_learning_tracks_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">snippet_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">-2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">app.gitlab_facade.models.UserProgress</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_learning_tracks_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_learning_tracks_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Get the progress of across all learning tracks for a user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user_id: The user ID.
+snippet_id: The ID of the snippet that stores the user’s progress.
+A value of -2 will get the ID of the snippet from gitlab.
+learning_track_id: The ID of the learning track. If no value is
+passed progress across all learning tracks will be returned.</p>
+</dd>
+<dt>Returns:</dt><dd><p>The learning track progress across all learning tracks.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_open_suggestions">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_open_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion" title="app.gitlab_facade.models.LearningTrackSuggestion"><span class="pre">app.gitlab_facade.models.LearningTrackSuggestion</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_open_suggestions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_open_suggestions" title="Permalink to this definition"></a></dt>
+<dd><p>Get the open suggestions for a learning track.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A list of open suggestions for the learning track.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_root_long_term_token">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_root_long_term_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">GitlabAccessToken</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_root_long_term_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_root_long_term_token" title="Permalink to this definition"></a></dt>
+<dd><p>Get a long term token for the root user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user_id: The user ID.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A long term token for the root user.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_snippet_id">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_snippet_id</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_snippet_id"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_snippet_id" title="Permalink to this definition"></a></dt>
+<dd><p>Get the ID of the snippet that stores the user’s progress.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The ID of the snippet that stores the user’s progress.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If it is not possible to get the snippet.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_suggestions">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion" title="app.gitlab_facade.models.LearningTrackSuggestion"><span class="pre">app.gitlab_facade.models.LearningTrackSuggestion</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_suggestions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_suggestions" title="Permalink to this definition"></a></dt>
+<dd><p>Get the suggestions for a learning track.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A list of suggestions.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.get_user_info">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_user_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.gitlab_facade.models.UserInfo" title="app.gitlab_facade.models.UserInfo"><span class="pre">UserInfo</span></a></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.get_user_info"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.get_user_info" title="Permalink to this definition"></a></dt>
+<dd><p>Get user info.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>User info.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.login">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">login</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">password</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.GitlabToken" title="app.gitlab_facade.GitlabToken"><span class="pre">app.gitlab_facade.GitlabToken</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.UserInfo" title="app.gitlab_facade.models.UserInfo"><span class="pre">app.gitlab_facade.models.UserInfo</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.login"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.login" title="Permalink to this definition"></a></dt>
+<dd><p>Login to Gitlab.</p>
+<p>The login will be carried using Resource owner password credentials
+flow of OAuth2.</p>
+<dl>
+<dt>Args:</dt><dd><p>username: Username of the user.
+password: Password of the user.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A GitlabToken and UserInfo.</p>
+</dd>
+<dt>Raises:</dt><dd><p>aiohttp.ClientResponseError: If the request fails.
+GitlabError: If the response is invalid.
+asyncio.TimeoutError: If the request takes too long / gitlab</p>
+<blockquote>
+<div><p>is down.</p>
+</div></blockquote>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.manage_suggestion">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">manage_suggestion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestion_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.manage_suggestion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.manage_suggestion" title="Permalink to this definition"></a></dt>
+<dd><p>Manage a suggestion.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.
+suggestion_id: The suggestion ID.
+action: The action to perform.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LookupError: If the learning track does not exist.
+LookupError: If the suggestion does not exist.
+LookupError: If the suggestion is not open.
+GitlabError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.max_timeout">
+<span class="sig-name descname"><span class="pre">max_timeout</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">float</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#app.gitlab_facade.Gitlab.max_timeout" title="Permalink to this definition"></a></dt>
+<dd><p>Maximum timeout for requests in seconds.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.post_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackData" title="app.gitlab_facade.models.LearningTrackData"><span class="pre">LearningTrackData</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.post_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.post_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Post a new learning track to GitLab.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>The learning track ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.post_suggestions">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">post_suggestions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">suggestions</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#app.gitlab_facade.models.LearningTrackSuggestion" title="app.gitlab_facade.models.LearningTrackSuggestion"><span class="pre">app.gitlab_facade.models.LearningTrackSuggestion</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.post_suggestions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.post_suggestions" title="Permalink to this definition"></a></dt>
+<dd><p>Post suggestions to a learning track.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.
+suggestions: The suggestions to post.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.put_learning_track_progress">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">put_learning_track_progress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learning_track_progress</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.UserProgress" title="app.gitlab_facade.models.UserProgress"><span class="pre">UserProgress</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.put_learning_track_progress"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.put_learning_track_progress" title="Permalink to this definition"></a></dt>
+<dd><p>Update the progress of a learning track for a user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user_id: The user ID.
+learning_track_id: The learning track ID.
+learning_track_progress: The learning track progress.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LookupError: If the user does not exist.
+GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.refresh_token">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">refresh_token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GitlabRefreshToken</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#app.gitlab_facade.GitlabToken" title="app.gitlab_facade.GitlabToken"><span class="pre">GitlabToken</span></a></span></span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.refresh_token"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.refresh_token" title="Permalink to this definition"></a></dt>
+<dd><p>Refresh a Github token.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>token: Refresh token to use.</p>
+</dd>
+<dt>Returns:</dt><dd><p>A new GitlabToken.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.register">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#app.gitlab_facade.models.RegisterData" title="app.gitlab_facade.models.RegisterData"><span class="pre">RegisterData</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.register" title="Permalink to this definition"></a></dt>
+<dd><p>Register a user.
+Admin access is required to perform this request.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user_data: Data to register a user.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GitlabError: If the response is invalid.
+EntityAlreadyExists: If the username or email is already taken.
+ValueError: If the data is invalid.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.revert_learning_track">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">revert_learning_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">learning_track_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">change_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#Gitlab.revert_learning_track"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.Gitlab.revert_learning_track" title="Permalink to this definition"></a></dt>
+<dd><p>Revert a learning track to a previous commit.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>learning_track_id: The learning track ID.
+change_id: The commit SHA to revert to.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LookupError: If the learning track or commit does not exist.
+aiohttp.ClientResponseError: If the request fails.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.Gitlab.user_info">
+<span class="sig-name descname"><span class="pre">user_info</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#app.gitlab_facade.models.UserInfo" title="app.gitlab_facade.models.UserInfo"><span class="pre">UserInfo</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#app.gitlab_facade.Gitlab.user_info" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabConfig">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.</span></span><span class="sig-name descname"><span class="pre">GitlabConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">gitlab_hostname</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#GitlabConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.GitlabConfig" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Configuration for Gitlab.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>gitlab_hostname: Hostname of the Gitlab instance.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabConfig.gitlab_hostname">
+<span class="sig-name descname"><span class="pre">gitlab_hostname</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.GitlabConfig.gitlab_hostname" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabToken">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">app.gitlab_facade.</span></span><span class="sig-name descname"><span class="pre">GitlabToken</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">access_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GitlabAccessToken</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">expiration_date</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">datetime</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refresh_token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">GitlabRefreshToken</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/app/gitlab_facade.html#GitlabToken"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#app.gitlab_facade.GitlabToken" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A Gitlab token.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>access_token: Access token.
+token_type: Type of the token.
+expiration_date: Expiration date of the token.
+refresh_token: Refresh token.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabToken.access_token">
+<span class="sig-name descname"><span class="pre">access_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabAccessToken</span></em><a class="headerlink" href="#app.gitlab_facade.GitlabToken.access_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabToken.expiration_date">
+<span class="sig-name descname"><span class="pre">expiration_date</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">datetime</span></em><a class="headerlink" href="#app.gitlab_facade.GitlabToken.expiration_date" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabToken.refresh_token">
+<span class="sig-name descname"><span class="pre">refresh_token</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">GitlabRefreshToken</span></em><a class="headerlink" href="#app.gitlab_facade.GitlabToken.refresh_token" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="app.gitlab_facade.GitlabToken.token_type">
+<span class="sig-name descname"><span class="pre">token_type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#app.gitlab_facade.GitlabToken.token_type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

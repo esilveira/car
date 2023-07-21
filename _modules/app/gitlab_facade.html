@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>app.gitlab_facade &mdash; Career Center  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Career Center
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <!-- Local TOC -->
+              <div class="local-toc"></div>
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Career Center</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">app.gitlab_facade</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for app.gitlab_facade</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">asyncio</span> <span class="k">as</span> <span class="nn">_asyncio</span>
+<span class="kn">import</span> <span class="nn">binascii</span>
+
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">aiohttp</span> <span class="kn">import</span> <span class="n">FormData</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">ClassVar</span><span class="p">,</span> <span class="n">NewType</span>
+<span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">asdict</span><span class="p">,</span> <span class="n">dataclass</span>
+<span class="kn">import</span> <span class="nn">uuid</span>
+<span class="kn">from</span> <span class="nn">jwt</span> <span class="kn">import</span> <span class="n">decode</span> <span class="k">as</span> <span class="n">jwt_decode</span>
+<span class="kn">from</span> <span class="nn">jwt</span> <span class="kn">import</span> <span class="n">PyJWKClient</span><span class="p">,</span> <span class="n">PyJWKClientError</span><span class="p">,</span> <span class="n">InvalidTokenError</span>
+<span class="kn">import</span> <span class="nn">aiohttp</span>
+<span class="kn">import</span> <span class="nn">base64</span>
+<span class="kn">import</span> <span class="nn">jsonpatch</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urljoin</span>
+
+<span class="kn">from</span> <span class="nn">app.serialize</span> <span class="kn">import</span> <span class="n">to_dict</span>
+
+<span class="kn">from</span> <span class="nn">.images</span> <span class="kn">import</span> <span class="n">GitlabImage</span>
+<span class="kn">from</span> <span class="nn">.exceptions</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># noqa: F401</span>
+    <span class="n">GitlabError</span><span class="p">,</span>
+    <span class="n">GitlabLookupError</span><span class="p">,</span>
+    <span class="n">_ClientResponseBodyError</span><span class="p">,</span>
+    <span class="n">EntityAlreadyExists</span><span class="p">,</span>
+    <span class="n">LookupErrors</span><span class="p">,</span>
+    <span class="n">Unauthorized</span><span class="p">,</span>
+    <span class="n">InvalidCredentialsError</span><span class="p">,</span>
+    <span class="n">InvalidFileSizeError</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="p">(</span>  <span class="c1"># noqa: F401</span>
+    <span class="n">UserInfo</span><span class="p">,</span>
+    <span class="n">RegisterData</span><span class="p">,</span>
+    <span class="n">Creator</span><span class="p">,</span>
+    <span class="n">ResourceTypeEnum</span><span class="p">,</span>
+    <span class="n">Resource</span><span class="p">,</span>
+    <span class="n">Lesson</span><span class="p">,</span>
+    <span class="n">LevelEnum</span><span class="p">,</span>
+    <span class="n">LearningTrackData</span><span class="p">,</span>
+    <span class="n">LearningTrackSuggestion</span><span class="p">,</span>
+    <span class="n">LearningTrackMetadata</span><span class="p">,</span>
+    <span class="n">AllLearningTracks</span><span class="p">,</span>
+    <span class="n">ResourceProgress</span><span class="p">,</span>
+    <span class="n">UserProgress</span><span class="p">,</span>
+    <span class="n">LearningTrackCommit</span>
+<span class="p">)</span>
+
+
+<span class="n">GRANT_TYPE</span> <span class="o">=</span> <span class="s2">&quot;password&quot;</span>  <span class="c1"># Resource owner password credentials flow</span>
+<span class="n">SCOPES</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">([</span><span class="s2">&quot;api&quot;</span><span class="p">,</span> <span class="s2">&quot;openid&quot;</span><span class="p">,</span> <span class="s2">&quot;email&quot;</span><span class="p">])</span>  <span class="c1"># Scopes to request</span>
+<span class="n">GITLAB_MAX_IMAGE_SIZE</span> <span class="o">=</span> <span class="mi">200000</span>  <span class="c1"># 200KB</span>
+<span class="n">API_MAX_IMAGE_SIZE</span> <span class="o">=</span> <span class="mi">3145728</span>   <span class="c1"># 3MB</span>
+
+<span class="n">GitlabAccessToken</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;GitlabAccessToken&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="n">GitlabRefreshToken</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;GitlabRefreshToken&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="n">GitlabAdminPass</span> <span class="o">=</span> <span class="n">NewType</span><span class="p">(</span><span class="s2">&quot;GitlabAdminPass&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="GitlabConfig"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.GitlabConfig">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GitlabConfig</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration for Gitlab.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        gitlab_hostname: Hostname of the Gitlab instance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">gitlab_hostname</span><span class="p">:</span> <span class="nb">str</span></div>
+
+
+<div class="viewcode-block" id="GitlabToken"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.GitlabToken">[docs]</a><span class="nd">@dataclass</span>
+<span class="k">class</span> <span class="nc">GitlabToken</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A Gitlab token.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        access_token: Access token.</span>
+<span class="sd">        token_type: Type of the token.</span>
+<span class="sd">        expiration_date: Expiration date of the token.</span>
+<span class="sd">        refresh_token: Refresh token.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">access_token</span><span class="p">:</span> <span class="n">GitlabAccessToken</span>
+    <span class="n">token_type</span><span class="p">:</span> <span class="nb">str</span>
+    <span class="n">expiration_date</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span>
+    <span class="n">refresh_token</span><span class="p">:</span> <span class="n">GitlabRefreshToken</span></div>
+
+
+<div class="viewcode-block" id="Gitlab"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab">[docs]</a><span class="k">class</span> <span class="nc">Gitlab</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Facade for Gitlab APISAS.</span>
+
+<span class="sd">    This class is responsible for handling all the interactions with</span>
+<span class="sd">    Gitlab API.</span>
+
+<span class="sd">    Note: All requests can raise an asyncio.TimeoutError if the request</span>
+<span class="sd">    takes too long.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        config: Gitlab configuration.</span>
+<span class="sd">        session: aiohttp.ClientSession to use for requests.</span>
+<span class="sd">        access_token: Access token to use for requests. This token must</span>
+<span class="sd">            have the necessary scopes to perform the requests.</span>
+<span class="sd">        max_timeout: Maximum timeout for requests in seconds.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_rsa_cache</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">PyJWKClient</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cache for RSA public keys used for oidc verification.</span>
+
+<span class="sd">    Maps the hostname to the client used to extract the key.</span>
+
+<span class="sd">    The client itself has a built-in cache.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">_lock</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="n">_asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">]</span> <span class="o">=</span> <span class="n">_asyncio</span><span class="o">.</span><span class="n">Lock</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Lock to prevent concurrent fetching of JWT keys.&quot;&quot;&quot;</span>
+
+    <span class="n">_JWT_ALGORITHMS</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;RS256&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Algorithms supported by Gitlab for parsing JWT oidc tokens.&quot;&quot;&quot;</span>
+
+    <span class="n">user_info</span><span class="p">:</span> <span class="n">UserInfo</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">access_token</span><span class="p">:</span> <span class="n">GitlabAccessToken</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="n">max_timeout</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Maximum timeout for requests in seconds.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">config</span><span class="p">:</span> <span class="n">GitlabConfig</span><span class="p">,</span>
+        <span class="n">access_token</span><span class="p">:</span> <span class="n">GitlabAccessToken</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">session</span><span class="p">:</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize Gitlab.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            access_token: Access token to use for requests. This token must</span>
+<span class="sd">                have the necessary scopes to perform the requests.</span>
+<span class="sd">            config: Gitlab configuration.</span>
+<span class="sd">            session: aiohttp.ClientSession to use for requests.</span>
+<span class="sd">                If None, a new session will be created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">access_token</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="n">access_token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span> <span class="ow">or</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;access_token=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">access_token</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">...&gt;&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(access_token=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">access_token</span><span class="si">}</span><span class="s2">)&gt;&quot;</span><span class="p">)</span>  <span class="c1"># Can be empty string</span>
+
+    <span class="k">def</span> <span class="nf">_endpoint</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">urljoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">gitlab_hostname</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_parse_jwt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a JWT token.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token: JWT token to parse.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The parsed token.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the token is invalid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rsa_cache</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">gitlab_hostname</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="n">client</span> <span class="o">=</span> <span class="n">PyJWKClient</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">(</span><span class="s2">&quot;/oauth/discovery/keys&quot;</span><span class="p">),</span>
+                <span class="n">cache_keys</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">lifespan</span><span class="o">=</span><span class="mi">60</span> <span class="o">*</span> <span class="mi">30</span>
+            <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_rsa_cache</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">gitlab_hostname</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lock</span><span class="p">:</span>
+                <span class="n">signing_key</span> <span class="o">=</span> <span class="k">await</span> <span class="n">_asyncio</span><span class="o">.</span><span class="n">to_thread</span><span class="p">(</span>
+                    <span class="n">client</span><span class="o">.</span><span class="n">get_signing_key_from_jwt</span><span class="p">,</span>
+                    <span class="n">token</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">jwt_decode</span><span class="p">(</span><span class="n">token</span><span class="p">,</span>
+                              <span class="n">key</span><span class="o">=</span><span class="n">signing_key</span><span class="o">.</span><span class="n">key</span><span class="p">,</span>
+                              <span class="n">algorithms</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_JWT_ALGORITHMS</span><span class="p">)</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">PyJWKClientError</span><span class="p">,</span> <span class="n">InvalidTokenError</span><span class="p">)</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Invalid JWT token&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+<div class="viewcode-block" id="Gitlab.login"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.login">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">login</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+                    <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">GitlabToken</span><span class="p">,</span> <span class="n">UserInfo</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Login to Gitlab.</span>
+
+<span class="sd">        The login will be carried using Resource owner password credentials</span>
+<span class="sd">        flow of OAuth2.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            username: Username of the user.</span>
+<span class="sd">            password: Password of the user.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A GitlabToken and UserInfo.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            asyncio.TimeoutError: If the request takes too long / gitlab</span>
+<span class="sd">                is down.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;/oauth/token&quot;</span><span class="p">,</span>
+                <span class="n">base_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="n">GRANT_TYPE</span><span class="p">,</span>
+                    <span class="s2">&quot;username&quot;</span><span class="p">:</span> <span class="n">username</span><span class="p">,</span>
+                    <span class="s2">&quot;password&quot;</span><span class="p">:</span> <span class="n">password</span><span class="p">,</span>
+                    <span class="s2">&quot;scope&quot;</span><span class="p">:</span> <span class="s2">&quot; &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">SCOPES</span><span class="p">),</span>
+                <span class="p">},</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
+                <span class="c1"># Maybe should be ValueError...?</span>
+                <span class="k">raise</span> <span class="n">InvalidCredentialsError</span><span class="p">(</span><span class="s2">&quot;Invalid credentials&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span>  <span class="c1"># pragma: no cover</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">id_json</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_jwt</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;id_token&quot;</span><span class="p">])</span>
+
+            <span class="n">info</span> <span class="o">=</span> <span class="n">UserInfo</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">id_json</span><span class="p">[</span><span class="s2">&quot;sub&quot;</span><span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">id_json</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">id_json</span><span class="p">[</span><span class="s2">&quot;preferred_username&quot;</span><span class="p">],</span>
+                <span class="n">email</span><span class="o">=</span><span class="n">id_json</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">user_info</span> <span class="o">=</span> <span class="n">info</span>
+            <span class="n">token</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="o">=</span> <span class="n">GitlabAccessToken</span><span class="p">(</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">])</span>
+
+            <span class="k">return</span> <span class="p">(</span>
+                <span class="n">GitlabToken</span><span class="p">(</span>
+                    <span class="n">access_token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+                    <span class="n">token_type</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;token_type&quot;</span><span class="p">],</span>
+                    <span class="n">expiration_date</span><span class="o">=</span><span class="p">(</span>
+                        <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;expires_in&quot;</span><span class="p">])</span>
+                    <span class="p">),</span>
+                    <span class="n">refresh_token</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">],</span>
+                <span class="p">),</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">user_info</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Invalid data returned by Gitlab&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="Gitlab.register"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.register">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">register</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_data</span><span class="p">:</span> <span class="n">RegisterData</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Register a user.</span>
+<span class="sd">        Admin access is required to perform this request.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_data: Data to register a user.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            EntityAlreadyExists: If the username or email is already taken.</span>
+<span class="sd">            ValueError: If the data is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">data_dictionary</span> <span class="o">=</span> <span class="n">asdict</span><span class="p">(</span><span class="n">user_data</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;/users&quot;</span><span class="p">,</span>
+                <span class="n">base_path</span><span class="o">=</span><span class="s2">&quot;/api/v4/&quot;</span><span class="p">,</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data_dictionary</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">409</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="s2">&quot;Username has already been taken&quot;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EntityAlreadyExists</span><span class="p">(</span>
+                        <span class="s2">&quot;username&quot;</span><span class="p">,</span>
+                        <span class="n">entity</span><span class="o">=</span><span class="n">user_data</span><span class="o">.</span><span class="n">username</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+                <span class="k">if</span> <span class="s2">&quot;Email has already been taken&quot;</span> <span class="ow">in</span> <span class="n">message</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">EntityAlreadyExists</span><span class="p">(</span>
+                        <span class="s2">&quot;email&quot;</span><span class="p">,</span> <span class="n">entity</span><span class="o">=</span><span class="n">user_data</span><span class="o">.</span><span class="n">email</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
+                <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">err</span> <span class="o">:=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;password&quot;</span><span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid password: </span><span class="si">{</span><span class="n">err</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Invalid data received: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span></div>
+
+<div class="viewcode-block" id="Gitlab.refresh_token"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.refresh_token">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">refresh_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="n">GitlabRefreshToken</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GitlabToken</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Refresh a Github token.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            token: Refresh token to use.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A new GitlabToken.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;/oauth/token&quot;</span><span class="p">,</span>
+            <span class="n">base_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="n">data</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;grant_type&quot;</span><span class="p">:</span> <span class="s2">&quot;refresh_token&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;refresh_token&quot;</span><span class="p">:</span> <span class="n">token</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">GitlabToken</span><span class="p">(</span>
+                <span class="n">access_token</span><span class="o">=</span><span class="n">GitlabAccessToken</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;access_token&quot;</span><span class="p">]),</span>
+                <span class="n">token_type</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;token_type&quot;</span><span class="p">],</span>
+                <span class="n">expiration_date</span><span class="o">=</span><span class="p">(</span>
+                    <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;expires_in&quot;</span><span class="p">])</span>
+                <span class="p">),</span>
+                <span class="n">refresh_token</span><span class="o">=</span><span class="n">GitlabRefreshToken</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;refresh_token&quot;</span><span class="p">]),</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Invalid response from Gitlab&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_request_json</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">method</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">path</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+        <span class="n">base_path</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;/api/v4/&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Make a request to Gitlab API and return the JSON response.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            method: HTTP method to use.</span>
+<span class="sd">            path: Path to request.</span>
+<span class="sd">            *args: Positional arguments to pass to the request.</span>
+<span class="sd">            **kwargs: Keyword arguments to pass to the request.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            JSON response.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;headers&quot;</span><span class="p">,</span> <span class="p">{})</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">access_token</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="s2">&quot;Authorization&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">headers</span><span class="p">:</span>
+            <span class="n">headers</span><span class="p">[</span><span class="s2">&quot;Authorization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Bearer </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">access_token</span><span class="si">}</span><span class="s2">&quot;</span>
+
+        <span class="n">timeout</span> <span class="o">=</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientTimeout</span><span class="p">(</span>
+            <span class="n">total</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;timeout&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_timeout</span><span class="p">))</span>
+
+        <span class="k">async</span> <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="o">.</span><span class="n">request</span><span class="p">(</span>
+            <span class="n">method</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_endpoint</span><span class="p">(</span><span class="n">urljoin</span><span class="p">(</span><span class="n">base_path</span><span class="p">,</span> <span class="n">path</span><span class="p">)),</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span>
+            <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+
+            <span class="c1"># This assumes all responses are JSON, which is *hopefully*</span>
+            <span class="c1"># true for Gitlab. Otherwise an exception will be thrown.</span>
+            <span class="k">if</span> <span class="p">((</span><span class="n">response</span><span class="o">.</span><span class="n">content_length</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">content_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span>
+                    <span class="c1"># TODO: Make sure Gitlab always returns JSONs.</span>
+                    <span class="c1"># Gitlab&#39;s API sometimes does not have the</span>
+                    <span class="c1"># content-length header :shrug:</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="mi">201</span><span class="p">)):</span>
+                <span class="c1"># In order to get the body of the error we need to keep the</span>
+                <span class="c1"># response before the exception is thrown</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">content_type</span> <span class="o">==</span> <span class="s2">&quot;text/plain&quot;</span><span class="p">:</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">()</span>
+                <span class="k">elif</span> <span class="n">response</span><span class="o">.</span><span class="n">content_type</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;image/png&quot;</span><span class="p">]:</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">body</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">body</span> <span class="o">=</span> <span class="p">{}</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+            <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">e</span> <span class="o">=</span> <span class="n">_ClientResponseBodyError</span><span class="o">.</span><span class="n">from_error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">body</span><span class="p">)</span>
+                <span class="k">if</span> <span class="mi">500</span> <span class="o">&lt;=</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">&lt;</span> <span class="mi">600</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;Gitlab returned status code </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+                <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">401</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">Unauthorized</span><span class="p">()</span> <span class="kn">from</span> <span class="nn">e</span>
+                <span class="k">raise</span> <span class="n">e</span>
+            <span class="k">return</span> <span class="n">body</span>
+
+<div class="viewcode-block" id="Gitlab.get_user_info"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_user_info">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_user_info</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UserInfo</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get user info.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            User info.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span><span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/user&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">UserInfo</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;sub&quot;</span><span class="p">],</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;preferred_username&quot;</span><span class="p">],</span>
+                <span class="n">email</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;email&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Invalid response from Gitlab&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                 <span class="n">change_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LearningTrackData</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a specific Learning Track based on the ID recieved</span>
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: String with the larning track ID to get..</span>
+<span class="sd">            change_id: Commit id</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The learning track with the ID requested.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabLookupError: If the resource track does not exist.</span>
+<span class="sd">                - commit</span>
+<span class="sd">                - learning_track</span>
+<span class="sd">            KeyError: If the GitLab return invalid data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;projects/</span><span class="si">{</span><span class="n">learning_track_id</span><span class="si">}</span><span class="s2">/repository/files/track.json&quot;</span><span class="p">,</span>
+                <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;ref&quot;</span><span class="p">:</span> <span class="n">change_id</span> <span class="k">if</span> <span class="n">change_id</span> <span class="k">else</span> <span class="s2">&quot;main&quot;</span><span class="p">}</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="n">error_message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">error_message</span> <span class="o">==</span> <span class="s2">&quot;404 Commit Not Found&quot;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">GitlabLookupError</span><span class="p">(</span><span class="n">resource_type</span><span class="o">=</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">commit</span><span class="p">)</span>
+
+                <span class="k">raise</span> <span class="n">GitlabLookupError</span><span class="p">(</span>
+                    <span class="n">resource_type</span><span class="o">=</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">learning_track</span><span class="p">)</span>
+
+            <span class="k">raise</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+            <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span>
+                <span class="n">result</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+        <span class="n">result_metadata</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;projects/</span><span class="si">{</span><span class="n">learning_track_id</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">lessons</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">if</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;lessons&quot;</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">lesson_data</span> <span class="ow">in</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;lessons&quot;</span><span class="p">]:</span>
+                    <span class="n">resources</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="k">for</span> <span class="n">resource_data</span> <span class="ow">in</span> <span class="n">lesson_data</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">]:</span>
+                        <span class="n">resources</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Resource</span><span class="p">(</span><span class="o">**</span><span class="n">resource_data</span><span class="p">))</span>
+                    <span class="n">lesson_data</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resources</span>
+                    <span class="n">lesson</span> <span class="o">=</span> <span class="n">Lesson</span><span class="p">(</span><span class="o">**</span><span class="n">lesson_data</span><span class="p">)</span>
+                    <span class="n">lessons</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">lesson</span><span class="p">)</span>
+
+            <span class="n">creator</span> <span class="o">=</span> <span class="n">Creator</span><span class="p">(</span>
+                <span class="n">name</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                <span class="n">avatar</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">],</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
+                <span class="n">creator_id</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+            <span class="p">)</span>
+            <span class="n">description_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">])</span>
+
+            <span class="n">ext</span> <span class="o">=</span> <span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="n">image_response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">],</span>
+                <span class="n">base_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">base64_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">image_response</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">dataurl</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1">;base64,</span><span class="si">{</span><span class="n">base64_data</span><span class="si">}</span><span class="s1">&#39;</span>
+
+            <span class="k">return</span> <span class="n">LearningTrackData</span><span class="p">(</span>
+                <span class="n">learning_track_id</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="n">is_draft</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span>
+                    <span class="s2">&quot;builds_access_level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;disabled&quot;</span><span class="p">,</span>
+                <span class="n">is_private</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span>
+                <span class="c1"># Strip uniquifying UUID suffix</span>
+                <span class="n">title</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">7</span><span class="p">],</span>
+                <span class="n">career</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;career&quot;</span><span class="p">],</span>
+                <span class="n">career_path</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;career_path&quot;</span><span class="p">],</span>
+                <span class="n">description</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+                <span class="n">thumbnail_image</span><span class="o">=</span><span class="n">dataurl</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">],</span>
+                <span class="n">tags</span><span class="o">=</span><span class="n">result_metadata</span><span class="p">[</span><span class="s2">&quot;topics&quot;</span><span class="p">],</span>
+                <span class="n">skills</span><span class="o">=</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;skills&quot;</span><span class="p">],</span>
+                <span class="n">createdBy</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+                <span class="n">lessons</span><span class="o">=</span><span class="n">lessons</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Invalid response from Gitlab&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_learning_tracks"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_tracks">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_learning_tracks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                  <span class="n">search</span><span class="p">:</span> <span class="nb">str</span>
+                                  <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get all Learning Tracks based on the search query&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;projects?search=&quot;</span> <span class="o">+</span> <span class="n">search</span><span class="p">)</span>
+
+        <span class="n">hasResults</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">hasResults</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;projects&quot;</span><span class="p">)</span>
+
+        <span class="n">learning_tracks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">creator</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">learning_track</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;owner&quot;</span> <span class="ow">in</span> <span class="n">learning_track</span><span class="p">:</span>
+                <span class="n">creator</span> <span class="o">=</span> <span class="n">Creator</span><span class="p">(</span>
+                    <span class="n">name</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;name&quot;</span><span class="p">],</span>
+                    <span class="n">avatar</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">],</span>
+                    <span class="n">username</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;username&quot;</span><span class="p">],</span>
+                    <span class="n">creator_id</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;owner&quot;</span><span class="p">][</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                <span class="p">)</span>
+
+            <span class="n">description_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">])</span>
+            <span class="n">ext</span> <span class="o">=</span> <span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="k">async</span> <span class="k">with</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientSession</span><span class="p">()</span> <span class="k">as</span> <span class="n">session</span><span class="p">:</span>
+                <span class="k">async</span> <span class="k">with</span> <span class="n">session</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                        <span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;avatar_url&quot;</span><span class="p">])</span> <span class="k">as</span> <span class="n">response</span><span class="p">:</span>
+                    <span class="n">response</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="k">await</span> <span class="n">response</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="n">base64_data</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span>
+                        <span class="n">response</span><span class="o">.</span><span class="n">image</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+            <span class="n">dataurl</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;data:image/</span><span class="si">{</span><span class="n">ext</span><span class="si">}</span><span class="s1">;base64,</span><span class="si">{</span><span class="n">base64_data</span><span class="si">}</span><span class="s1">&#39;</span>
+            <span class="n">learning_track_info</span> <span class="o">=</span> <span class="n">LearningTrackMetadata</span><span class="p">(</span>
+                <span class="n">learning_track_id</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="n">title</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">7</span><span class="p">],</span>
+                <span class="n">is_draft</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span>
+                    <span class="s2">&quot;builds_access_level&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;disabled&quot;</span><span class="p">,</span>
+                <span class="n">is_private</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;visibility&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span>
+                <span class="n">career</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;career&quot;</span><span class="p">],</span>
+                <span class="n">description</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">],</span>
+                <span class="n">thumbnail_image</span><span class="o">=</span><span class="n">dataurl</span><span class="p">,</span>
+                <span class="n">tags</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;topics&quot;</span><span class="p">],</span>
+                <span class="n">createdBy</span><span class="o">=</span><span class="n">creator</span><span class="p">,</span>
+                <span class="n">level</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">],</span>
+                <span class="n">career_path</span><span class="o">=</span><span class="n">description_json</span><span class="p">[</span><span class="s2">&quot;career_path&quot;</span><span class="p">]</span>
+            <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">learning_track_info</span><span class="o">.</span><span class="n">is_draft</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="n">learning_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">learning_track_info</span><span class="p">)</span>
+
+        <span class="n">all_learning_tracks</span> <span class="o">=</span> <span class="n">AllLearningTracks</span><span class="p">(</span>
+            <span class="n">learning_tracks</span><span class="o">=</span><span class="n">learning_tracks</span><span class="p">,</span>
+            <span class="n">hasResults</span><span class="o">=</span><span class="n">hasResults</span>
+        <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">all_learning_tracks</span></div>
+
+<div class="viewcode-block" id="Gitlab.post_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.post_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">post_learning_track</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">learning_track</span><span class="p">:</span> <span class="n">LearningTrackData</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post a new learning track to GitLab.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The learning track ID.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># ~50% chance of collision at 4820 same named</span>
+        <span class="c1"># titles according to birthday paradox.</span>
+        <span class="c1"># sufficient for our use case.</span>
+        <span class="n">title_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+
+        <span class="n">description_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;career&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">career</span><span class="p">,</span>
+            <span class="s2">&quot;career_path&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">career_path</span><span class="p">,</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">level</span><span class="o">.</span><span class="n">value</span>
+        <span class="p">}</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">decoded_image</span> <span class="o">=</span> <span class="n">GitlabImage</span><span class="o">.</span><span class="n">get_image</span><span class="p">(</span>
+                <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">learning_track</span><span class="o">.</span><span class="n">thumbnail_image</span><span class="p">),</span>
+                <span class="n">API_MAX_IMAGE_SIZE</span><span class="p">,</span>
+                <span class="n">GITLAB_MAX_IMAGE_SIZE</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">binascii</span><span class="o">.</span><span class="n">Error</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid image.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+        <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid image.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Create the learning track repository</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;/projects&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="c1"># Due to limitations in metadata fields we are saving the</span>
+                    <span class="c1"># career as part of the description</span>
+                    <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">description_data</span><span class="p">),</span>
+                    <span class="s2">&quot;builds_access_level&quot;</span><span class="p">:</span> <span class="s2">&quot;disabled&quot;</span> \
+                    <span class="k">if</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">is_draft</span> <span class="k">else</span> <span class="s2">&quot;enabled&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;visibility&quot;</span><span class="p">:</span> <span class="s2">&quot;private&quot;</span> \
+                    <span class="k">if</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">is_private</span> <span class="k">else</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span>
+                    <span class="c1"># Randomize the name so we can have multiple learning</span>
+                    <span class="c1"># tracks with the same name</span>
+                    <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">title</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">title_uuid</span><span class="p">,</span>
+                    <span class="s2">&quot;topics&quot;</span><span class="p">:</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">tags</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">400</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid learning track.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span> <span class="n">e</span>  <span class="c1"># pragma: no cover</span>
+
+        <span class="n">learning_track_id</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">FormData</span><span class="p">()</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
+            <span class="s2">&quot;avatar&quot;</span><span class="p">,</span>
+            <span class="n">decoded_image</span><span class="p">,</span>
+            <span class="n">filename</span><span class="o">=</span><span class="s2">&quot;avatar.jpg&quot;</span><span class="p">,</span>
+            <span class="n">content_type</span><span class="o">=</span><span class="s2">&quot;image/jpeg&quot;</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">async</span> <span class="k">with</span> <span class="n">_asyncio</span><span class="o">.</span><span class="n">TaskGroup</span><span class="p">()</span> <span class="k">as</span> <span class="n">tg</span><span class="p">:</span>
+                <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="n">learning_track_id</span><span class="p">,</span>
+                    <span class="n">data</span><span class="o">=</span><span class="n">data</span>
+                <span class="p">))</span>
+
+                <span class="n">raw_learning_track</span> <span class="o">=</span> <span class="n">to_dict</span><span class="p">(</span><span class="n">learning_track</span><span class="p">)</span>
+                <span class="n">json_raw</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">raw_learning_track</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span>
+                            <span class="p">{</span><span class="s2">&quot;skills&quot;</span><span class="p">,</span> <span class="s2">&quot;lessons&quot;</span><span class="p">}}</span>
+
+                <span class="n">tg</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="n">learning_track_id</span> <span class="o">+</span>
+                    <span class="s2">&quot;/repository/files/track.json&quot;</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_raw</span><span class="p">),</span>
+                        <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Create learning track&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">))</span>
+
+        <span class="k">except</span><span class="o">*</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="c1"># if writing the image or the track file fails we want to</span>
+            <span class="c1"># delete the repo</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+                                         <span class="sa">f</span><span class="s2">&quot;projects/</span><span class="si">{</span><span class="n">learning_track_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+                <span class="c1"># if it fails we want to try again</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span><span class="s2">&quot;DELETE&quot;</span><span class="p">,</span>
+                                             <span class="s2">&quot;projects/&quot;</span> <span class="o">+</span> <span class="n">learning_track_id</span><span class="p">)</span>
+                <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">&quot;Invalid learning track, impossible to&quot;</span>
+                        <span class="s2">&quot;rollback the transaction for learning&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;track </span><span class="si">{</span><span class="n">learning_track_id</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_snippet_id"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_snippet_id">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_snippet_id</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the ID of the snippet that stores the user&#39;s progress.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The ID of the snippet that stores the user&#39;s progress.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If it is not possible to get the snippet.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;snippets/&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">snippet_id</span> <span class="o">=</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># Snippet doesn&#39;t exist</span>
+            <span class="k">for</span> <span class="n">snippet</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">snippet</span><span class="p">[</span><span class="s2">&quot;title&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;User Progress&quot;</span><span class="p">:</span>
+                    <span class="n">snippet_id</span> <span class="o">=</span> <span class="n">snippet</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+                    <span class="k">break</span>
+
+            <span class="k">return</span> <span class="n">snippet_id</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error getting the user&#39;s current progress.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_learning_tracks_progress"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_tracks_progress">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_learning_tracks_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                           <span class="n">snippet_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+                                           <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">UserProgress</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the progress of across all learning tracks for a user.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: The user ID.</span>
+<span class="sd">            snippet_id: The ID of the snippet that stores the user&#39;s progress.</span>
+<span class="sd">            A value of -2 will get the ID of the snippet from gitlab.</span>
+<span class="sd">            learning_track_id: The ID of the learning track. If no value is</span>
+<span class="sd">            passed progress across all learning tracks will be returned.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The learning track progress across all learning tracks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">snippet_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+            <span class="n">snippet_id</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_snippet_id</span><span class="p">()</span>
+
+        <span class="n">learning_tracks</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">if</span> <span class="n">snippet_id</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">learning_tracks</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">total_progress</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;snippets/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">snippet_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/raw&quot;</span>
+            <span class="p">)</span>
+
+            <span class="n">total_progress</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">total_progress</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">learning_track</span> <span class="ow">in</span> <span class="n">total_progress</span><span class="p">:</span>
+                <span class="n">current_progress</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="k">for</span> <span class="n">progress</span> <span class="ow">in</span> <span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;progress&quot;</span><span class="p">]:</span>
+                    <span class="n">current_progress</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ResourceProgress</span><span class="p">(</span><span class="o">**</span><span class="n">progress</span><span class="p">))</span>
+                <span class="n">learning_tracks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">UserProgress</span><span class="p">(</span>
+                    <span class="n">progress</span><span class="o">=</span><span class="n">current_progress</span><span class="p">,</span>
+                    <span class="n">learning_track_id</span><span class="o">=</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;learning_track_id&quot;</span><span class="p">]</span>
+                <span class="p">))</span>
+
+            <span class="c1"># If no learning track ID is passed return all learning tracks</span>
+
+            <span class="k">return</span> <span class="n">learning_tracks</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error getting the user&#39;s current progress.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_learning_track_progress"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track_progress">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_learning_track_progress</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                          <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                          <span class="n">snippet_id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span>
+                                          <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">ResourceProgress</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the progress of a learning track for a user.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: The user ID.</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The learning track progress.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># If the learning track doesn&#39;t exist no point fetching the progress</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;projects/&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">all_progress</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="p">(</span>
+            <span class="n">snippet_id</span><span class="o">=</span><span class="n">snippet_id</span><span class="p">)</span>
+
+        <span class="n">progress</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">learning_track</span> <span class="ow">in</span> <span class="n">all_progress</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">learning_track_id</span> <span class="o">==</span> <span class="n">learning_track_id</span><span class="p">:</span>
+                <span class="n">progress</span> <span class="o">=</span> <span class="n">learning_track</span><span class="o">.</span><span class="n">progress</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;User progress not found.&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">progress</span></div>
+
+<div class="viewcode-block" id="Gitlab.put_learning_track_progress"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.put_learning_track_progress">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">put_learning_track_progress</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+            <span class="n">learning_track_progress</span><span class="p">:</span> <span class="n">UserProgress</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the progress of a learning track for a user.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: The user ID.</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+<span class="sd">            learning_track_progress: The learning track progress.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the user does not exist.</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If the learning track doesn&#39;t exist we don&#39;t need to do anything</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;projects/&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Learning track not found.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># To minimize the number of calls to gitlab</span>
+        <span class="n">snippet_id</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_snippet_id</span><span class="p">()</span>
+
+        <span class="c1"># Get a list of the current user’s tracks in progress.</span>
+        <span class="n">current_progress</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_learning_tracks_progress</span><span class="p">(</span>
+            <span class="n">snippet_id</span><span class="o">=</span><span class="n">snippet_id</span><span class="p">)</span>
+
+        <span class="n">learning_track_progress</span><span class="o">.</span><span class="n">learning_track_id</span> <span class="o">=</span> <span class="n">learning_track_id</span>
+        <span class="n">raw_progress</span> <span class="o">=</span> <span class="n">to_dict</span><span class="p">(</span><span class="n">learning_track_progress</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If the user has no progress we need to create the file</span>
+            <span class="k">if</span> <span class="n">current_progress</span> <span class="o">==</span> <span class="p">[]:</span>
+                <span class="c1"># Create a new snippet.</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/snippets&quot;</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;User Progress&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;progress.json&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">([</span><span class="n">raw_progress</span><span class="p">]),</span>
+                        <span class="s2">&quot;visibility&quot;</span><span class="p">:</span> <span class="s2">&quot;private&quot;</span>
+                        <span class="p">}</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">progress_exists</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">progress</span> <span class="ow">in</span> <span class="n">current_progress</span><span class="p">:</span>
+                    <span class="c1"># If progress for the learning track already exists we</span>
+                    <span class="c1"># update it</span>
+                    <span class="k">if</span> <span class="n">progress</span><span class="o">.</span><span class="n">learning_track_id</span> <span class="o">==</span> <span class="n">learning_track_id</span><span class="p">:</span>
+                        <span class="n">progress_exists</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="n">progress</span><span class="o">.</span><span class="n">progress</span> <span class="o">=</span> <span class="n">raw_progress</span><span class="p">[</span><span class="s2">&quot;progress&quot;</span><span class="p">]</span>
+                        <span class="k">break</span>
+                <span class="k">if</span> <span class="n">progress_exists</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                    <span class="c1"># If the progress doesn&#39;t exist we add it</span>
+                    <span class="n">new_user_progress</span> <span class="o">=</span> <span class="n">UserProgress</span><span class="p">(</span>
+                        <span class="n">learning_track_id</span><span class="o">=</span><span class="n">learning_track_id</span><span class="p">,</span>
+                        <span class="n">progress</span><span class="o">=</span><span class="n">raw_progress</span><span class="p">[</span><span class="s2">&quot;progress&quot;</span><span class="p">])</span>
+
+                    <span class="n">current_progress</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_user_progress</span><span class="p">)</span>
+
+                <span class="n">current_progress</span> <span class="o">=</span> <span class="p">[</span><span class="n">to_dict</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span>
+                                    <span class="ow">in</span> <span class="n">current_progress</span><span class="p">]</span>
+
+                <span class="c1"># Update the snippet.</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/snippets/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">snippet_id</span><span class="p">),</span>
+                    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;title&quot;</span><span class="p">:</span> <span class="s2">&quot;User Progress&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;file_name&quot;</span><span class="p">:</span> <span class="s2">&quot;progress.json&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">current_progress</span><span class="p">),</span>
+                        <span class="s2">&quot;visibility&quot;</span><span class="p">:</span> <span class="s2">&quot;private&quot;</span>
+                        <span class="p">}</span>
+                <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error updating the user&#39;s current progress.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_learning_track_commits"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_learning_track_commits">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_learning_track_commits</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackCommit</span><span class="p">]:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">&quot;/projects/</span><span class="si">{</span><span class="n">learning_track_id</span><span class="si">}</span><span class="s2">/repository/&quot;</span>
+                <span class="s2">&quot;commits?path=track.json&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">GitlabLookupError</span><span class="p">(</span>
+                    <span class="n">resource_type</span><span class="o">=</span><span class="n">LookupErrors</span><span class="o">.</span><span class="n">learning_track</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="n">LearningTrackCommit</span><span class="p">(</span>
+                <span class="n">change_id</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">],</span>
+                <span class="n">change_date</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;created_at&quot;</span><span class="p">],</span>
+                <span class="n">change_message</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span>
+            <span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">result</span>
+        <span class="p">]</span></div>
+
+<div class="viewcode-block" id="Gitlab.copy_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.copy_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">copy_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If the learning track doesn&#39;t exist we don&#39;t need to do anything</span>
+            <span class="n">learning_track</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;projects/&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+            <span class="k">raise</span>  <span class="c1"># pragma: no cover</span>
+
+        <span class="n">title</span> <span class="o">=</span> <span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">][:</span><span class="o">-</span><span class="mi">6</span><span class="p">]</span> <span class="o">+</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/fork&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">title</span><span class="p">,</span>
+                        <span class="c1"># path is the hyphen separated version of the name</span>
+                        <span class="s2">&quot;path&quot;</span><span class="p">:</span> <span class="n">title</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">,</span> <span class="s2">&quot;-&quot;</span><span class="p">),</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+            <span class="n">id_</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error copying the learning track.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span>
+
+        <span class="c1"># Suggestions are track specific so we need to delete them</span>
+        <span class="c1"># Due to async nature of gitlab we need to wait for the file to exist</span>
+        <span class="c1"># If the file doesn&#39;t exist the 1st try we want to try again after 1s</span>
+        <span class="c1"># If it still doesn&#39;t exist we can ignore it</span>
+        <span class="c1"># Using Exception because we don&#39;t know what the error will be exactly</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;/repository/files/suggestions.json&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Remove suggestions after copying.&quot;</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="n">id_</span>
+        <span class="k">except</span> <span class="p">(</span><span class="n">_ClientResponseBodyError</span><span class="p">,</span> <span class="n">GitlabError</span><span class="p">):</span>
+            <span class="k">await</span> <span class="n">_asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">id_</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="s2">&quot;/repository/files/suggestions.json&quot;</span><span class="p">,</span>
+                    <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                        <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span>
+                        <span class="s2">&quot;Remove suggestions after copying.&quot;</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="n">id_</span>
+            <span class="k">except</span> <span class="p">(</span><span class="n">_ClientResponseBodyError</span><span class="p">,</span> <span class="n">GitlabError</span><span class="p">):</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Delete suggestions file error.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">id_</span></div>
+
+<div class="viewcode-block" id="Gitlab.revert_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.revert_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">revert_learning_track</span><span class="p">(</span>
+            <span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">change_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Revert a learning track to a previous commit.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+<span class="sd">            change_id: The commit SHA to revert to.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the learning track or commit does not exist.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Revert the learning track.</span>
+            <span class="c1"># Get the raw file from the commit</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">raw_file</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                    <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+                    <span class="s2">&quot;/repository/files/track.json/raw?ref=&quot;</span> <span class="o">+</span> <span class="n">change_id</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;404 Commit Not Found&quot;</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;change_id &quot;</span> <span class="o">+</span> <span class="n">change_id</span><span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;404 File Not Found&quot;</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;track.json&quot;</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+                <span class="k">raise</span>
+
+            <span class="c1"># Do a commit with the raw file</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;/repository/files/track.json&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Revert to commit &quot;</span> <span class="o">+</span> <span class="n">change_id</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">raw_file</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error reverting the learning track.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_root_long_term_token"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_root_long_term_token">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_root_long_term_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user_id</span><span class="p">:</span> <span class="nb">str</span>
+                                       <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">GitlabAccessToken</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a long term token for the root user.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            user_id: The user ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A long term token for the root user.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">scopes</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;api&quot;</span><span class="p">,</span> <span class="s2">&quot;read_user&quot;</span><span class="p">,</span> <span class="s2">&quot;sudo&quot;</span><span class="p">,</span> <span class="s2">&quot;read_api&quot;</span><span class="p">,</span> <span class="s2">&quot;read_repository&quot;</span><span class="p">,</span>
+                  <span class="s2">&quot;write_repository&quot;</span><span class="p">,</span> <span class="s2">&quot;admin_mode&quot;</span><span class="p">]</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;/users/&quot;</span> <span class="o">+</span> <span class="n">user_id</span> <span class="o">+</span> <span class="s2">&quot;/personal_access_tokens&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;root&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;scopes&quot;</span><span class="p">:</span> <span class="n">scopes</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">GitlabAccessToken</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s2">&quot;token&quot;</span><span class="p">])</span>
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error creating the personal access token.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.post_suggestions"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.post_suggestions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">post_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                               <span class="n">suggestions</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackSuggestion</span><span class="p">]):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Post suggestions to a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+<span class="sd">            suggestions: The suggestions to post.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">current_suggestions</span><span class="p">,</span> <span class="n">file_exists</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_suggestions</span><span class="p">(</span>
+            <span class="n">learning_track_id</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">suggestion</span> <span class="ow">in</span> <span class="n">suggestions</span><span class="p">:</span>
+
+            <span class="n">raw_suggestion</span> <span class="o">=</span> <span class="n">to_dict</span><span class="p">(</span><span class="n">suggestion</span><span class="p">)</span>
+            <span class="n">raw_suggestion</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                <span class="n">suggestion_id</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()),</span>
+                <span class="n">suggestion_status</span><span class="o">=</span><span class="s2">&quot;open&quot;</span><span class="p">)</span>
+
+            <span class="n">current_suggestions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">raw_suggestion</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Gitlab only accepts a PUT if the file already exists</span>
+            <span class="n">method</span> <span class="o">=</span> <span class="s2">&quot;PUT&quot;</span> <span class="k">if</span> <span class="n">file_exists</span> <span class="k">else</span> <span class="s2">&quot;POST&quot;</span>
+
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="n">method</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;/repository/files/suggestions.json&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">current_suggestions</span><span class="p">),</span>
+                    <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Add suggestions.&quot;</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error saving the suggestion.&quot;</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">exc</span></div>
+
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">_get_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span>
+                               <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackSuggestion</span><span class="p">],</span> <span class="nb">bool</span><span class="p">]:</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the suggestions for a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of suggestions and a boolean indicating if the file exists.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the learning track does not exist.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;projects/&quot;</span>
+                <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;/repository/files/suggestions.json/?ref=main&quot;</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">!=</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="n">message</span> <span class="o">=</span> <span class="n">e</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;message&quot;</span><span class="p">)</span>
+            <span class="k">match</span> <span class="n">message</span><span class="p">:</span>
+                <span class="k">case</span> <span class="s2">&quot;404 Project Not Found&quot;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">))</span>
+                <span class="k">case</span> <span class="s2">&quot;404 File Not Found&quot;</span><span class="p">:</span>
+                    <span class="c1"># If the suggestions file doesn&#39;t exist it means there are</span>
+                    <span class="c1"># no suggestions</span>
+                    <span class="k">return</span> <span class="p">([],</span> <span class="kc">False</span><span class="p">)</span>
+                <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>
+                    <span class="k">raise</span>  <span class="c1"># pragma: no cover</span>
+
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span>
+            <span class="n">result</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">suggestions</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+
+<div class="viewcode-block" id="Gitlab.get_suggestions"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_suggestions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span>
+                              <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackSuggestion</span><span class="p">]:</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the suggestions for a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of suggestions.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">suggestions</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_suggestions</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">suggestions</span></div>
+
+<div class="viewcode-block" id="Gitlab.get_open_suggestions"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.get_open_suggestions">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">get_open_suggestions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span>
+                                   <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">LearningTrackSuggestion</span><span class="p">]:</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the open suggestions for a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A list of open suggestions for the learning track.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_suggestions</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">suggestions</span> <span class="k">if</span>
+                       <span class="n">item</span><span class="p">[</span><span class="s2">&quot;suggestion_status&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;open&quot;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">suggestions</span></div>
+
+<div class="viewcode-block" id="Gitlab.edit_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.edit_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">edit_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                  <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                  <span class="n">patch</span><span class="p">:</span> <span class="nb">list</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Edit a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            patch: The patch to apply to the learning track.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            GitlabError: If the response is invalid.</span>
+<span class="sd">            aiohttp.ClientResponseError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># If the learning track doesn&#39;t exist we don&#39;t need to do anything</span>
+            <span class="n">learning_track</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_learning_track</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="n">title_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">()</span><span class="o">.</span><span class="n">hex</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">edited_learning_track</span> <span class="o">=</span> <span class="n">LearningTrackData</span><span class="p">(</span><span class="o">**</span><span class="n">jsonpatch</span><span class="o">.</span><span class="n">apply_patch</span><span class="p">(</span>
+                <span class="n">to_dict</span><span class="p">(</span><span class="n">learning_track</span><span class="p">),</span>
+                <span class="n">patch</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">jsonpatch</span><span class="o">.</span><span class="n">JsonPatchConflict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid patch.&quot;</span><span class="p">)</span>
+
+        <span class="n">description_data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">description</span><span class="p">,</span>
+            <span class="s2">&quot;career&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">career</span><span class="p">,</span>
+            <span class="s2">&quot;career_path&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">career_path</span><span class="p">,</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">level</span>
+        <span class="p">}</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">),</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="c1"># Due to limitations in metadata fields we are saving the</span>
+                <span class="c1"># career as part of the description</span>
+                <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">description_data</span><span class="p">),</span>
+                <span class="s2">&quot;builds_access_level&quot;</span><span class="p">:</span>
+                <span class="s2">&quot;disabled&quot;</span> <span class="k">if</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">is_draft</span> <span class="k">else</span> <span class="s2">&quot;enabled&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;visibility&quot;</span><span class="p">:</span>
+                <span class="s2">&quot;private&quot;</span> <span class="k">if</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">is_private</span> <span class="k">else</span> <span class="s2">&quot;public&quot;</span><span class="p">,</span>
+                <span class="c1"># Randomize the name so we can have multiple learning</span>
+                <span class="c1"># tracks with the same name</span>
+                <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">title</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">title_uuid</span><span class="p">,</span>
+                <span class="s2">&quot;topics&quot;</span><span class="p">:</span> <span class="n">edited_learning_track</span><span class="o">.</span><span class="n">tags</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+
+        <span class="n">raw_learning_track</span> <span class="o">=</span> <span class="n">to_dict</span><span class="p">(</span><span class="n">edited_learning_track</span><span class="p">)</span>
+        <span class="n">json_raw</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">raw_learning_track</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span>
+                    <span class="p">{</span><span class="s2">&quot;skills&quot;</span><span class="p">,</span> <span class="s2">&quot;lessons&quot;</span><span class="p">}}</span>
+
+        <span class="n">commit_message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">operation</span> <span class="ow">in</span> <span class="n">patch</span><span class="p">:</span>
+            <span class="n">new_path</span> <span class="o">=</span> <span class="n">operation</span><span class="p">[</span><span class="s2">&quot;path&quot;</span><span class="p">]</span>
+            <span class="n">commit_message</span> <span class="o">=</span> <span class="n">commit_message</span> <span class="o">+</span> <span class="n">operation</span><span class="p">[</span><span class="s2">&quot;op&quot;</span><span class="p">]</span> <span class="o">+</span>\
+                <span class="s2">&quot; value &quot;</span> <span class="o">+</span> <span class="n">new_path</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">commit_message</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">72</span><span class="p">:</span>
+            <span class="n">commit_message</span> <span class="o">=</span> <span class="n">commit_message</span><span class="p">[:</span><span class="mi">69</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;...&quot;</span>
+
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+            <span class="s2">&quot;PUT&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+            <span class="s2">&quot;/repository/files/track.json&quot;</span><span class="p">,</span>
+            <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">json_raw</span><span class="p">),</span>
+                <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="n">commit_message</span>
+            <span class="p">}</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.manage_suggestion"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.manage_suggestion">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">manage_suggestion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                                <span class="n">suggestion_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Manage a suggestion.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+<span class="sd">            suggestion_id: The suggestion ID.</span>
+<span class="sd">            action: The action to perform.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the learning track does not exist.</span>
+<span class="sd">            LookupError: If the suggestion does not exist.</span>
+<span class="sd">            LookupError: If the suggestion is not open.</span>
+<span class="sd">            GitlabError: If the request fails.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">suggestions</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_suggestions</span><span class="p">(</span>
+            <span class="n">learning_track_id</span><span class="p">)</span>
+
+        <span class="n">suggestion_exists</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">for</span> <span class="n">suggestion</span> <span class="ow">in</span> <span class="n">suggestions</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;suggestion_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">suggestion_id</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;suggestion_status&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;open&quot;</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Suggestion already managed.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">suggestion_exists</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">break</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">suggestion_exists</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Suggestion not found.&quot;</span><span class="p">)</span>
+
+        <span class="n">commit_actions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">lesson_exists</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="s1">&#39;approve&#39;</span><span class="p">:</span>
+
+            <span class="n">learning_track</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;GET&quot;</span><span class="p">,</span> <span class="s2">&quot;projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;/repository/files/track.json?ref=main&quot;</span><span class="p">)</span>
+
+            <span class="n">learning_track</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span>
+                <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;content&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;UTF-8&quot;</span><span class="p">))</span>
+
+            <span class="k">for</span> <span class="n">lesson</span> <span class="ow">in</span> <span class="n">learning_track</span><span class="p">[</span><span class="s2">&quot;lessons&quot;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">lesson</span><span class="p">[</span><span class="s2">&quot;lesson_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;lesson_id&quot;</span><span class="p">]:</span>
+                    <span class="n">lesson_exists</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">lesson</span><span class="p">[</span><span class="s2">&quot;resources&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;resource&quot;</span><span class="p">])</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="n">lesson_exists</span><span class="p">:</span>
+                <span class="c1"># If the lesson exists we need to update the track.json file</span>
+                <span class="n">commit_actions</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+                    <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="s2">&quot;track.json&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">learning_track</span><span class="p">),</span>
+                <span class="p">})</span>
+
+        <span class="c1"># If the lesson doesn&#39;t exist we mark the suggestion as rejected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">lesson_exists</span><span class="p">:</span>
+            <span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;suggestion_status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;reject&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">suggestion</span><span class="p">[</span><span class="s2">&quot;suggestion_status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span>
+
+        <span class="c1"># The changes to the suggestions.json file we commit regardless</span>
+        <span class="n">commit_actions</span><span class="o">.</span><span class="n">append</span><span class="p">({</span>
+            <span class="s2">&quot;action&quot;</span><span class="p">:</span> <span class="s2">&quot;update&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;file_path&quot;</span><span class="p">:</span> <span class="s2">&quot;suggestions.json&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;content&quot;</span><span class="p">:</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">suggestions</span><span class="p">),</span>
+        <span class="p">})</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;POST&quot;</span><span class="p">,</span> <span class="s2">&quot;projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span> <span class="o">+</span>
+                <span class="s2">&quot;/repository/commits&quot;</span><span class="p">,</span>
+                <span class="n">json</span><span class="o">=</span><span class="p">{</span>
+                    <span class="s2">&quot;branch&quot;</span><span class="p">:</span> <span class="s2">&quot;main&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;commit_message&quot;</span><span class="p">:</span> <span class="s2">&quot;Add resource &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">suggestion</span><span class="p">[</span><span class="s1">&#39;resource&#39;</span><span class="p">][</span><span class="s1">&#39;title&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> to lesson &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">suggestion</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;actions&quot;</span><span class="p">:</span> <span class="n">commit_actions</span><span class="p">,</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">aiohttp</span><span class="o">.</span><span class="n">ClientResponseError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">GitlabError</span><span class="p">(</span><span class="s2">&quot;Error updating the suggestion status.&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Gitlab.delete_learning_track"><a class="viewcode-back" href="../../app.gitlab_facade.html#app.gitlab_facade.Gitlab.delete_learning_track">[docs]</a>    <span class="k">async</span> <span class="k">def</span> <span class="nf">delete_learning_track</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">learning_track_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Delete a learning track.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            learning_track_id: The learning track ID.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            LookupError: If the learning track does not exist.</span>
+<span class="sd">            GitlabError: If the request fails.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_request_json</span><span class="p">(</span>
+                <span class="s2">&quot;DELETE&quot;</span><span class="p">,</span> <span class="s2">&quot;/projects/&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">_ClientResponseBodyError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="mi">404</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="n">learning_track_id</span><span class="p">)</span>
+            <span class="k">raise</span>  <span class="c1"># pragma: no cover</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, MSE 2022 Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Welcome to the backend of the Career Center! test
+# Welcome to the backend of the Career Center! test 2
 
 This project contains the backend side for the Career Center.
 This projects runs on Python with FastAPI framework.
